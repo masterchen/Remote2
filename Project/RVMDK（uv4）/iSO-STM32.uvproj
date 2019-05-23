@@ -363,7 +363,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS;..\..\Libraries\FWlib\inc;..\..\App;..\..\User;..\..\uCOS-III\Source;..\..\uCOS-III\Ports;..\..\uCOS-III\uC-CPU;..\..\uCOS-III\Cfg;..\..\uCOS-III\uC-LIB;..\..\Bsp\inc;..\..\UGUI;..\..\System\delay;..\..\System\sys;..\..\System\ascii</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS;..\..\Libraries\FWlib\inc;..\..\App;..\..\User;..\..\uCOS-III\Source;..\..\uCOS-III\Ports;..\..\uCOS-III\uC-CPU;..\..\uCOS-III\Cfg;..\..\uCOS-III\uC-LIB;..\..\Bsp\inc;..\..\UGUI;..\..\System\delay;..\..\System\sys;..\..\System\ascii;..\..\System\crc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -930,6 +930,11 @@
               <FileName>sys.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\System\sys\sys.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\System\crc\crc16.c</FilePath>
             </File>
           </Files>
         </Group>

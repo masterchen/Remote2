@@ -36,7 +36,7 @@ void BSP_Init(void)
 	
 	
 	//串口初始化
-	uart1_init(115200);
+	USART1_Init(115200);
 	/* 初始化gui */
 	
 }
