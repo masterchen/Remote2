@@ -661,6 +661,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\Bsp\src\bsp_usart.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Bsp\src\bsp_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Bsp\src\bsp_spi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
