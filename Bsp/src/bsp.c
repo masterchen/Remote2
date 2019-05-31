@@ -34,11 +34,19 @@ void BSP_Init(void)
 	//LCD_Init();		//LCD显示初始化	
 	//LCD_Reginit();
 	
-	
+	//按键初始化
+	 KEY_Init();
+	 //IO初始化
+
 	//串口初始化
-	USART1_Init(115200);
+	USART1_Init(9600);
+	USART2_Init();
+
 	/* 初始化gui */
 	
+	//spi初始化
+	SPI_Flash_Init();
+
 }
 
 /*

@@ -582,6 +582,11 @@
               <FilePath>..\..\User\stm32f10x_it.c</FilePath>
             </File>
             <File>
+              <FileName>bsp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Bsp\src\bsp.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f10x_it.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\User\stm32f10x_it.h</FilePath>
@@ -621,11 +626,6 @@
         <Group>
           <GroupName>Bsp</GroupName>
           <Files>
-            <File>
-              <FileName>bsp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Bsp\src\bsp.c</FilePath>
-            </File>
             <File>
               <FileName>bsp_led.c</FileName>
               <FileType>1</FileType>
@@ -670,6 +670,11 @@
               <FileName>bsp_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Bsp\src\bsp_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Bsp\src\bsp_key.c</FilePath>
             </File>
           </Files>
         </Group>

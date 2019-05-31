@@ -41,7 +41,7 @@ uint16_t LCD9341_GetPoint(uint16_t _usX1 , uint16_t _usY1);
 void LCD9341_SetBackLight(uint8_t _bright);
 void LCD9341_DrawJPG(uint16_t _usX1 , uint16_t _usY1 ,  uint16_t _usX2 , uint16_t _usY2 , uint16_t *_ptr);
 void LCD9341_SetDispHV(uint16_t _usX1, uint16_t _usY1, uint16_t _usX2, uint16_t _usY2, uint8_t _ucHV);
-
 void bsp_InitLCD(void);
+void LCD9341_Drawpic(u16 x,u16 y,u16 width,u16 hight,const unsigned char *p);
 
 

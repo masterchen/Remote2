@@ -29,7 +29,7 @@ CPU_STK	StartUp_Stk[STARTUP_TASK_STK_SIZE];		//定义任务堆栈
 int main(void)
 {
   OS_ERR err;	
-
+	
   /* 板级初始化 */
 	CPU_SR_ALLOC();	
 	BSP_Init();

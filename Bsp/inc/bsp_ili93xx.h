@@ -116,7 +116,7 @@ typedef struct
 #define R2L_U2D  2 //从右到左,从上到下
 #define R2L_D2U  3 //从右到左,从下到上
 
-#define U2D_L2R  4 //从上到下,从左到右
+#define U2D_L2R  4 //从上到下,从左到右-
 #define U2D_R2L  5 //从上到下,从右到左
 #define D2U_L2R  6 //从下到上,从左到右
 #define D2U_R2L  7 //从下到上,从右到左	 
@@ -168,7 +168,7 @@ void LCD_FillColorRect( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uin
 void LCD_SetPoint(uint16_t Xpos,uint16_t Ypos,uint16_t point);
 void LCD_DrawRectangle(u16 x1, u16 y1, u16 x2, u16 y2);		   				//画矩形
 void LCD_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 color);		   				//填充单色
-void LCD_Color_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 *color);				//填充指定颜色
+void LCD_Color_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 color);				//填充指定颜色
 void LCD_ShowChar(u16 x,u16 y,u8 num,u8 size,u8 mode);						//显示一个字符
 void LCD_ShowNum(u16 x,u16 y,u32 num,u8 len,u8 size);  						//显示一个数字
 void LCD_ShowxNum(u16 x,u16 y,u32 num,u8 len,u8 size,u8 mode);				//显示 数字

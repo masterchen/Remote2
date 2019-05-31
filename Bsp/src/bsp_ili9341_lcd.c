@@ -887,3 +887,30 @@ void LCD9341_DrawJPG(uint16_t _usX1 , uint16_t _usY1 ,  uint16_t _usX2 , uint16_
    }
 	 	  
 }
+/*
+*********************************************************************************************************
+*	函 数 名: LCD9341_Drawpic
+*	功能说明: 
+*	形    参: X,Y的坐标和颜色
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+void LCD9341_Drawpic(u16 x,u16 y,u16 width,u16 hight,const unsigned char *p) //????
+{
+  	int i; 
+	unsigned char picH,picL; 
+	LCD9341_SetDispWin(x,y,x+width-1,y+hight-1);//????
+    for(i=0;i<width*hight;i++)
+	{	
+	 	picL=*(p+i*2);	//??????
+		picH=*(p+i*2+1);				
+		LCD_WR_Data(picH<<8|picL);  						
+	}	
+
+}
+
+
+
+
+
+

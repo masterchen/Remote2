@@ -76,7 +76,7 @@ int GetKey (void)  {
 }
 */
  
-#if EN_USART1_RX   //如果使能了接收
+//#if EN_USART1_RX   //如果使能了接收
 //串口1中断服务程序
 //注意,读取USARTx->SR能避免莫名其妙的错误   	
 u8 USART_RX_BUF[USART_REC_LEN];     //接收缓冲,最大USART_REC_LEN个字节.
@@ -86,12 +86,7 @@ u8 USART_RX_BUF[USART_REC_LEN];     //接收缓冲,最大USART_REC_LEN个字节.
 //bit13~0，	接收到的有效字节数目
 u16 USART_RX_STA=0;       //接收状态标记	  
 
-u8 USART2_RX_BUF[USART_REC_LEN];     //接收缓冲,最大USART_REC_LEN个字节.
-//接收状态
-//bit15，	接收完成标志
-//bit14，	接收到0x0d
-//bit13~0，	接收到的有效字节数目
-u16 USART2_RX_STA=0;       //接收状态标记	
+
 
 
 //初始化IO 串口1 
@@ -171,7 +166,7 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
 	OSIntExit();  											 
 #endif
 } 
-#endif	
+//#endif	
 
 
 //usart2初始化
@@ -204,7 +199,7 @@ void USART2_Init(void)
 		NVIC_Init(&NVIC_InitStructure);	
   
     //USART参数初始化设置
-		USART_InitStructure.USART_BaudRate = 115200;//
+		USART_InitStructure.USART_BaudRate = 9600;//
 		USART_InitStructure.USART_WordLength = USART_WordLength_8b;
 		USART_InitStructure.USART_StopBits = USART_StopBits_1;
 		USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -217,7 +212,14 @@ void USART2_Init(void)
     USART_Cmd(USART2, ENABLE);                 
 }
 
+/*
 
+u8 USART2_RX_BUF[USART_REC_LEN];     //接收缓冲,最大USART_REC_LEN个字节.
+//接收状态
+//bit15，	接收完成标志
+//bit14，	接收到0x0d
+//bit13~0，	接收到的有效字节数目
+u16 USART2_RX_STA=0;       //接收状态标记	
 
 void USART2_IRQHandler(void)                	
 {
@@ -253,3 +255,94 @@ void USART2_IRQHandler(void)
 	OSIntExit();  											 
 #endif
 }
+
+void UART_PutChar(USART_TypeDef* USARTx, uint8_t Data)
+  {      
+		USART_SendData(USARTx, Data);
+		while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET){} 
+	}
+
+void UART_PutStr (USART_TypeDef* USARTx, uint8_t *str)  
+ {
+	 while (0 != *str)        
+			{ 
+				UART_PutChar(USARTx, *str);
+				str++;        
+			}  
+ } 
+ */
+/*
+void USART_SendString(USART_TypeDef* USARTx, char *str)
+{
+
+while(*str)
+{
+ while(!USART_GetFlagStatus(USARTx,USART_FLAG_TXE)); //判断是否可以发送
+      USART_SendData(USARTx,*str);
+      while(USART_GetFlagStatus(USARTx, USART_FLAG_TC)); //判断是否发送完成，此句必须有，否则会造
+                                                                                                  //成只发送最后一个字符（覆盖）
+ str++;           
+  }
+}
+
+*/
+
+
+
+ //串口1发送字符串
+void Uart1SendStr(u8 *s)
+{
+  while (*s)                  //检测字符串结束标志
+    {
+		while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);	  
+		USART_SendData(USART1,*s++);
+
+    }
+
+}
+
+
+
+
+
+////串口2发送串口数据(字节)
+//void Uart2SendByte(u8 ch)
+//{
+//    S2BUF = ch;                 //写数据到UART2数据寄存器
+//	while(!(S2CON&S2TI));    
+//    S2CON&=~S2TI;
+//}
+
+
+u8  RX_buffer[tbuf];
+
+
+//串口2发送字符串
+void Uart2SendStr(u8 *s)
+{
+  while (*s)                  //检测字符串结束标志
+    {
+		while(USART_GetFlagStatus(USART2, USART_FLAG_TC) == RESET);	  
+		USART_SendData(USART2,*s++);
+
+    }
+
+}
+
+u8 RX_num=0;   //接收计数变量
+
+
+
+void USART2_IRQHandler(void)
+{	    
+ 
+ 	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET) //接收到数据
+	{	 
+	 			 
+		RX_buffer[RX_num] =USART_ReceiveData(USART2); 	//读取接收到的数据
+		RX_num++;               
+		if(RX_num>tbuf) RX_num = 0;   
+	}  											 
+} 
+
+
