@@ -1,6 +1,6 @@
 #include "app.h"
 #include "bsp_touch.h"
-
+#include "ugui.h"
 void Task_GUI(void *p_arg);
 extern void TOUCH_Scan(void);
 
@@ -104,16 +104,36 @@ void Task_LED1(void *p_arg)
 	 u8 key;
   OS_ERR err;
   (void)p_arg;  
+
 /*	
 	  tmpData[0] = '0';
 		tmpData[1] = '0';
 	  tmpData[3] = '0';
 		tmpData[4] = '0';
 */		
+/*	
+		UG_FillScreen(C_BLACK);
+	  UG_WindowCreate(&window_1,obj_buff_wnd_1,MAX_OBJECTS,window_1_callback);
 	
+*/
+		//LCD_Clear(CYAN);
+		OSTimeDly(500,OS_OPT_TIME_DLY,&err);
 		//GPIO_SetBits(GPIOE,GPIO_Pin_6);
 		GPIO_SetBits(GPIOE,GPIO_Pin_2);
-		GPIO_SetBits(GPIOE,GPIO_Pin_3);
+		//GPIO_SetBits(GPIOE,GPIO_Pin_3);
+		
+		GUI_Demo();
+		/*
+		LCD_DrawLine(30,20,200,200);
+		LCD_DrawRectangle(0,0,50,50);
+        LCD_FillColorRect(50,50,150,150,GREEN);
+        LCD_DrawColorLine(0,0,320,240,BROWN);		
+		LCD_DrawHLine(0,0,200,RED);
+		LCD_FillColorRect(20,20,200,200,LCD_Color2Index_565(C_BROWN));
+		LCD_ShowString(120,200,200,16,16,"Show me1 !");
+	  */
+		
+/*
   while (1)
   {
 
@@ -127,15 +147,14 @@ void Task_LED1(void *p_arg)
 						 (OS_ERR*    )&err);
 			
 		}
-		
+	*/	
 	  //printf ("the key = %d\r\n", key);
 
 		//LCD_ShowString(80,100,300,16,16,(u8 *)key);
 		//GUI_TOUCH_Exec();										//10ms一次GUI调用处理触屏
 		//TOUCH_Scan();											//10ms一次GUI调用处理触屏
 	{ 
-		LCD_ShowString(120,200,200,16,16,"Show me1 !");
-		LCD_Fill(10,30,150,170,RED);
+		//LCD_Fill(10,30,150,170,RED);
 		//LCD_Fill(200,30,250,170,BROWN);
 
 		//OSTimeDly(100,OS_OPT_TIME_DLY,&err);
@@ -149,7 +168,7 @@ void Task_LED1(void *p_arg)
 //    LED1( OFF);     
    // OSTimeDlyHMSM(0, 0,0,100,OS_OPT_TIME_HMSM_STRICT,&err);
   }
-}
+
 
 /* 
  * 函数名：Task_LED2
@@ -217,7 +236,7 @@ void Task_GUI(void *p_arg)
   OS_ERR err;
   (void)p_arg;   
 	
-	LCD_ShowString(120,100,200,16,16,"task two here is !");
+	//LCD_ShowString(120,100,200,16,16,"task two here is !");
 
   while (1)
   {

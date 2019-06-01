@@ -44,7 +44,7 @@ unsigned LCD_Color2Index_565(UG_COLOR Color) {
 /* Hardware accelerator for UG_DrawLine (Platform: STM32F4x9) */
 UG_RESULT _HW_DrawLine( UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c )
 {
-	 LCD_DrawColorLine(x1,y1,x2,y2,LCD_Color2Index_565(c));
+   LCD_DrawColorLine(x1,y1,x2,y2,LCD_Color2Index_565(c));
    return UG_RESULT_OK;
 }
 

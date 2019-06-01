@@ -5266,7 +5266,7 @@ void UG_Update( void )
       {
          gui->last_window = gui->active_window;
          gui->active_window = gui->next_window;
-
+     
          /* Do we need to draw an inactive title? */
          if ( (gui->last_window->style & WND_STYLE_SHOW_TITLE) && (gui->last_window->state & WND_STATE_VISIBLE) )
          {

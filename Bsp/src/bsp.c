@@ -43,7 +43,14 @@ void BSP_Init(void)
 	USART2_Init();
 
 	/* 初始化gui */
-	
+/*
+  UG_Init(&gui,void(*)(UG_S16,UG_S16,UG_COLOR))_HW_DrawPoint,240,320);
+	UG_DriverRegister(DRIVER_DRAW_LINE,(void*)_HW_DrawLine);
+	UG_DriverRegister(DRIVER_FILE_FRAME,(void*)_HW_FillLine);
+	UG_DriverEnable(DRIVER_DRAW_LINE);
+	UG_DricerEnable(DRIVER_FILL_FRAME);
+*/
+
 	//spi初始化
 	SPI_Flash_Init();
 

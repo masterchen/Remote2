@@ -16,7 +16,6 @@
   */
   
 #include "includes.h"
-#include "ugui.h"
 
 OS_TCB	StartUp_TCB;		   					          //定义任务控制块
 CPU_STK	StartUp_Stk[STARTUP_TASK_STK_SIZE];		//定义任务堆栈
@@ -33,7 +32,7 @@ int main(void)
   /* 板级初始化 */
 	CPU_SR_ALLOC();	
 	BSP_Init();
-	
+
 
 	OS_CRITICAL_ENTER(); //进入临界区
 	

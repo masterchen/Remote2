@@ -11,6 +11,7 @@
 #include "bsp_key.h"
 #include "bsp_spi.h"
 #include "bsp_flash.h"
+
 void SysTick_init(void);
 extern void BSP_Init(void);
 extern u8 KEY_Scan(void); //°´¼üÉ¨Ãèº¯Êý			

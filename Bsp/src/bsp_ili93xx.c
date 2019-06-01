@@ -537,10 +537,11 @@ void LCD_SetPoint(uint16_t Xpos,uint16_t Ypos,uint16_t point)
 	{
 		return;
 	}
-	LCD_SetCursor(Xpos,Ypos);
-	LCD_WriteReg(0x0022,point);
+	LCD_SetCursor(Xpos,Ypos); 	//设置光标位置 
+	LCD_WriteRAM_Prepare(); //开始写入GRAM
+	TFTLCD->LCD_RAM=point;
+	
 }
-
 void LCD_DrawColorLine( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uint16_t color )
 {
     short dx,dy;      /* 定义X Y轴上增加的变量值 */
@@ -588,7 +589,8 @@ void LCD_DrawColorLine( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uin
 	    temp = 2 * dy - dx;               /* 计算下个点的位置 */         
         while( x0 != x1 )
         {
-	        LCD_SetPoint(x0,y0,color);    /* 画起点 */ 
+
+			LCD_SetPoint(x0,y0,color);    /* 画起点 */ 
 	        x0++;                         /* X轴上加1 */
 	        if( temp > 0 )                /* 判断下下个点的位置 */
 	        {
