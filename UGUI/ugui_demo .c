@@ -1,4 +1,5 @@
 #include "ugui_demo.h"
+#include "image.h"
 #include "delay.h"
 int i;
 void GUI_Demo(void)
@@ -69,8 +70,8 @@ void GUI_Demo(void)
    UG_TextboxSetForeColor( &window_2, TXB_ID_1, C_BLUE );
    UG_TextboxSetHSpace( &window_2, TXB_ID_1, 1 );
    /* Create Image 1 */
-   //UG_ImageCreate( &window_2, &image2_1, IMG_ID_0, (UG_WindowGetInnerWidth( &window_2 )>>1) - (logo.width>>1), 40, 0, 0 );
-   //UG_ImageSetBMP( &window_2, IMG_ID_0, &logo );
+   UG_ImageCreate( &window_2, &image2_1, IMG_ID_0, (UG_WindowGetInnerWidth( &window_2 )>>1) - (logo.width>>1), 40, 0, 0 );
+   UG_ImageSetBMP( &window_2, IMG_ID_0, &logo );
 
    /* -------------------------------------------------------------------------------- */
    /* Create Window 3 (Benchmark Result)                                               */

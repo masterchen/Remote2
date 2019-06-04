@@ -1,6 +1,5 @@
 #include "app.h"
 #include "bsp_touch.h"
-#include "ugui.h"
 void Task_GUI(void *p_arg);
 extern void TOUCH_Scan(void);
 
@@ -105,13 +104,14 @@ u8 Data_compare(u8 *p)
  */
 void Task_LED1(void *p_arg)
 {
-	  int k;
-		//char temp[10]={1,2,3,4,5,6,7,8,9,10};
-	  //char *test[8]={"a","b","c","d","e","f","g","h"};
-		char dispbuf[1];
-	  u8 key;
+	int k;
+	//char temp[10]={1,2,3,4,5,6,7,8,9,10};
+	//char *test[8]={"a","b","c","d","e","f","g","h"};
+	char dispbuf[1];
+	u8 key;
     OS_ERR err;
     (void)p_arg;  
+	GUI_Demo();
 
 /*	
 	  tmpData[0] = '0';
@@ -139,7 +139,6 @@ void Task_LED1(void *p_arg)
 		LCD_FillColorRect(20,20,200,200,LCD_Color2Index_565(C_BROWN));
 		LCD_ShowString(120,200,200,16,16,"Show me1 !");
 	  */
-
   while(1)
 		{
 			//for(k=0;k<8;k++)

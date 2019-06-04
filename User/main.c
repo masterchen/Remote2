@@ -33,7 +33,6 @@ int main(void)
 	CPU_SR_ALLOC();	
 	BSP_Init();
 
-
 	OS_CRITICAL_ENTER(); //进入临界区
 	
   /* 初始化"uC/OS-III"内核 */  
