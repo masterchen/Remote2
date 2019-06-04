@@ -4696,14 +4696,14 @@ void UG_PutChar( char chr, UG_S16 x, UG_S16 y, UG_COLOR fc, UG_COLOR bc )
 
    switch ( bt )
    {
-      case 0xF6: bt = 0x94; break; // ö
-      case 0xD6: bt = 0x99; break; // Ö
-      case 0xFC: bt = 0x81; break; // ü
-      case 0xDC: bt = 0x9A; break; // Ü
-      case 0xE4: bt = 0x84; break; // ä
-      case 0xC4: bt = 0x8E; break; // Ä
-      case 0xB5: bt = 0xE6; break; // µ
-      case 0xB0: bt = 0xF8; break; // °
+      case 0xF6: bt = 0x94; break; // ?
+      case 0xD6: bt = 0x99; break; // ?
+      case 0xFC: bt = 0x81; break; // ?
+      case 0xDC: bt = 0x9A; break; // ?
+      case 0xE4: bt = 0x84; break; // ?
+      case 0xC4: bt = 0x8E; break; // ?
+      case 0xB5: bt = 0xE6; break; // ?
+      case 0xB0: bt = 0xF8; break; // ?
    }
 
    yo = y;
@@ -4955,14 +4955,14 @@ void _UG_PutText(UG_TEXT* txt)
          bt = (UG_U8)*str;
          switch ( bt )
          {
-            case 0xF6: bt = 0x94; break; // ö
-            case 0xD6: bt = 0x99; break; // Ö
-            case 0xFC: bt = 0x81; break; // ü
-            case 0xDC: bt = 0x9A; break; // Ü
-            case 0xE4: bt = 0x84; break; // ä
-            case 0xC4: bt = 0x8E; break; // Ä
-            case 0xB5: bt = 0xE6; break; // µ
-            case 0xB0: bt = 0xF8; break; // °
+            case 0xF6: bt = 0x94; break; // ?
+            case 0xD6: bt = 0x99; break; // ?
+            case 0xFC: bt = 0x81; break; // ?
+            case 0xDC: bt = 0x9A; break; // ?
+            case 0xE4: bt = 0x84; break; // ?
+            case 0xC4: bt = 0x8E; break; // ?
+            case 0xB5: bt = 0xE6; break; // ?
+            case 0xB0: bt = 0xF8; break; // ?
          }
          yo = yp;
          bn = char_width;

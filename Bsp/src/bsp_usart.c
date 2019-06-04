@@ -1,5 +1,6 @@
 #include "sys.h"
-#include "bsp_usart.h"	  
+#include "bsp_usart.h"	 
+#include "string.h"
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //如果使用os,则包括下面的头文件即可.
 #if SYSTEM_SUPPORT_OS
@@ -85,6 +86,7 @@ u8 USART_RX_BUF[USART_REC_LEN];     //接收缓冲,最大USART_REC_LEN个字节.
 //bit14，	接收到0x0d
 //bit13~0，	接收到的有效字节数目
 u16 USART_RX_STA=0;       //接收状态标记	  
+extern u8 test[8];
 
 
 
@@ -132,9 +134,12 @@ void USART1_Init(u32 bound){
 
 }
 
+
+//debug用串口1
 void USART1_IRQHandler(void)                	//串口1中断服务程序
 	{
-	u8 Res;
+  	u8 Res;
+		memset(USART_RX_BUF,0,sizeof(USART_RX_BUF));
 #ifdef SYSTEM_SUPPORT_OS	 	
 	OSIntEnter();    
 #endif
@@ -154,9 +159,9 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
 				if(Res==0x0d)USART_RX_STA|=0x4000;
 				else
 					{
-					USART_RX_BUF[USART_RX_STA&0X3FFF]=Res ;
+					  USART_RX_BUF[USART_RX_STA&0X3FFF]=Res ;
 						printf("%x",Res);
-					USART_RX_STA++;
+					  USART_RX_STA++;
 					if(USART_RX_STA>(USART_REC_LEN-1))USART_RX_STA=0;//接收数据错误,重新开始接收	  
 					}		 
 				}
@@ -166,7 +171,41 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
 	OSIntExit();  											 
 #endif
 } 
-//#endif	
+
+
+
+/*
+void USART1_IRQHandler(void)                	//串口1中断服务程序
+{
+	  u8 Res=0;
+	  u8 m=0;
+		if(USART_GetITStatus(USART1, USART_IT_RXNE))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+		{
+			Res =USART_ReceiveData(USART1);
+			printf("%x",Res);
+			USART_RX_BUF[m]=Res;
+			m++;
+			if(m>=2)
+				m=0;
+		}
+	}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //usart2初始化

@@ -1,6 +1,6 @@
 #include "ugui_demo.h"
 #include "delay.h"
-
+int i;
 void GUI_Demo(void)
 {
 		/* Init ?UI */
@@ -14,7 +14,7 @@ void GUI_Demo(void)
 	 UG_FillScreen( C_BLACK );
 		/* Create Window 1 */
 	 UG_WindowCreate( &window_1, obj_buff_wnd_1, MAX_OBJECTS, window_1_callback );
-	 UG_WindowSetTitleText( &window_1, "GUI @ STM32F103" );
+	 //UG_WindowSetTitleText( &window_1, "GUI @ STM32F103" );
 	 UG_WindowSetTitleTextFont( &window_1, &FONT_12X20 );
     /* Create some Buttons */
 	 UG_ButtonCreate( &window_1, &button1_1, BTN_ID_0, 10, 10, 110, 60 );
@@ -98,7 +98,7 @@ void GUI_Demo(void)
 	{
 	      UG_WindowShow( &window_1 );				
 				delay_ms(1000);				
-				//UG_Update();	//WindowsË¢ÐÂ
+				UG_Update();	//WindowsË¢ÐÂ
 				UG_WindowShow( &window_2 );
 				delay_ms(1000);
 				UG_Update();	//WindowsË¢ÐÂ

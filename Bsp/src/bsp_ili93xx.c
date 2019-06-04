@@ -1075,26 +1075,3 @@ void LCD_ShowChar(u16 x,u16 y,u8 num,u8 size,u8 mode)
 */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -193,11 +193,6 @@ void LCD_DrawPoint_16Bit(u16 color);
 void LCD_Init(void);
 void LCD_Reginit(void);
 
-
-
-
-
-
 //LCD分辨率设置
 #define SSD_HOR_RESOLUTION		320		//LCD水平分辨率
 #define SSD_VER_RESOLUTION		240		//LCD垂直分辨率
