@@ -69,9 +69,9 @@ u8 Key_Scan(void)
 	  int keyValue=0;
 		//u8 keyValue[5]={0x00,0x00,0x00,0x00,0x00};
 		//int x1,x2,x3,x4,x5;
-	//GPIO_Write(GPIOC,(GPIOC->ODR & 0x0000));//è®©PC5-9è¾“å‡ºé«˜ç”µå¹³
+	//GPIO_Write(GPIOC,(GPIOC->ODR & 0x0000));//è®©PC5-9è¾“å‡ºé«˜ç”µå¹?
 	
-	GPIO_Write(GPIOC,((GPIOC->ODR & 0xfc1f )| 0x03e0));//è®©PC5-9è¾“å‡ºé«˜ç”µå¹³
+	GPIO_Write(GPIOC,((GPIOC->ODR & 0xfc1f )| 0x03e0));//è®©PC5-9è¾“å‡ºé«˜ç”µå¹?
   if((GPIOC->IDR & 0x001f)==0x0000)//è‹¥PC0-4å…¨ä¸º0ï¼Œåˆ™æ²¡æœ‰æŒ‰é”®æŒ‰ä¸‹
 	 {
 		delay_ms(2);
@@ -232,6 +232,82 @@ u8 Key_Scan(void)
 	return keyValue;
 
 }
+/*
+typedef struct
+{
+¡¡uchar ¡¡KeyStateIndex ; ¡¡¡¡/ / µ±Ç°×´Ì¬Ë÷ÒýºÅ
+¡¡uchar ¡¡KeyDnState ; ¡¡¡¡/ / °´ÏÂ¡°ÏòÏÂ¡±¼üÊ±×ªÏòµÄ×´Ì¬Ë÷ÒýºÅ
+¡¡uchar ¡¡KeyUpState ; ¡¡¡¡/ / °´ÏÂ¡°ÏòÉÏ¡±¼üÊ±×ªÏòµÄ×´Ì¬Ë÷ÒýºÅ
+¡¡uchar ¡¡KeyCrState ; ¡¡¡¡/ / °´ÏÂ¡°»Ø³µ¡±¼üÊ±×ªÏòµÄ×´Ì¬Ë÷ÒýºÅ
+¡¡uchar ¡¡KeyBackState ; ¡¡¡¡/ / °´ÏÂ¡°ÍË»Ø¡±¼üÊ±×ªÏòµÄ×´Ì¬Ë÷ÒýºÅ
+¡¡void ¡¡ (*CurrentOperate)( ) ; ¡¡¡¡/ / µ±Ç°×´Ì¬Ó¦¸ÃÖ´ÐÐµÄ¹¦ÄÜ²Ù×÷
+} ¡¡KbdTabSt ruct ;
+# define SIZE - OF KEYBD - MENU 55 ¡¡¡¡/ / ²Ëµ¥×Ü³¤¶È
+KbdTabSt ruct code KeyTab[ SIZE - OF - KEYBD - MENU ] =
+{
+¡¡{0 ,0 ,0 ,1 ,0 , MainJob1 } ,
+¡¡{1 ,7 ,2 ,8 ,0 , Dsp Point} , ¡¡¡¡/ / µÚÒ»²ã
+¡¡{2 ,1 ,3 ,8 ,0 , DspCurve}, ¡¡¡¡/ / µÚÒ»²ã
+¡¡{3 ,2 ,4 ,36 ,0 ,Dsp Kout} , ¡¡¡¡/ / µÚÒ»²ã
+¡¡{4 ,3 ,5 ,50 ,0 , DisCloseDown } , ¡¡¡¡/ / µÚÒ»²ã
+
+
+¡¡{5 ,4 ,6 ,8 ,0 ,  ModifyPoint} , ¡¡¡¡/ / µÚÒ»²ã
+¡¡{6 ,5 ,7 ,52 ,0 , SetCloseDown } , ¡¡¡¡/ / µÚÒ»²ã
+¡¡{7 ,6 ,1 ,0 ,0 , Cancel} , ¡¡¡¡/ / µÚÒ»²ã
+
+¡¡{52 ,53 ,53 ,0 ,1 ,  OkSetCloseDown1} ,
+¡¡{53 ,52 ,52 ,0 ,1 , OkSetCloseDown2} ,
+¡¡{54 ,0 ,0 ,0 ,0 , Disable} ,
+  ¡­
+  ¡­
+} ;
+¡¡void Get Keylnput (void)
+{
+¡¡switch ( status &0xf0)
+¡¡¡¡{
+¡¡¡¡case 0xe0 :/ / »Ø³µ¼ü,ÕÒ³öÐÂµÄ²Ëµ¥×´Ì¬±àºÅ
+¡¡¡¡¡¡¡­
+        KeyFuncIndex = KeyTab[ KeyFuncIndex ] . KeyCrState ;
+¡¡¡¡¡¡¡­
+¡¡¡¡¡¡break ;
+¡¡¡¡case 0xb0 :/ / ÏòÏÂ¼ü,ÕÒ³öÐÂµÄ²Ëµ¥×´Ì¬±àºÅ
+¡¡¡¡¡¡¡­
+¡¡¡¡¡¡¡¡KeyFuncIndex = KeyTab [ KeyFuncIndex ] . KeyDn2State ;
+¡¡¡¡¡¡¡­
+¡¡¡¡break ;
+   case 0xd0 :/ / ÏòÉÏ¼ü,ÕÒ³öÐÂµÄ²Ëµ¥×´Ì¬±àºÅ
+
+
+¡¡¡¡¡¡¡­
+¡¡¡¡¡¡¡¡KeyFuncIndex = KeyTab [ KeyFuncIndex ] . KeyUp2State ;
+¡¡¡¡¡¡¡­
+¡¡¡¡¡¡break ;
+¡¡¡¡case 0x70 :/ / »ØÍË¼ü,ÕÒ³öÐÂµÄ²Ëµ¥×´Ì¬±àºÅ
+¡¡¡¡¡¡¡­
+¡¡¡¡¡¡¡¡KeyFuncIndex = KeyTab [ KeyFuncIndex ] . KeyBack2State ;
+¡¡¡¡¡¡¡­
+¡¡¡¡¡¡break ;
+¡¡¡¡case 0 ;
+¡¡¡¡¡¡¡¡return ; ¡¡¡¡/ / ´íÎóµÄ´¦Àí
+¡¡¡¡¡¡¡¡break ;
+¡¡¡¡¡¡}
+¡¡¡¡KeyFuncPt r = KeyTab[ KeyFuncIndex ] . CurrentOperate ;
+¡¡¡¡( * KeyFuncPt r) () ; ¡¡¡¡/ / Ö´ÐÐµ±Ç°°´¼üµÄ²Ù×÷
+}
+
+
+*/
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -251,7 +327,7 @@ int Key_Scan(void)
 	uKeyCode KeyCodeUnion;
 
 	//  
-	GPIO_Write(GPIOC,((GPIOA->ODR & 0x00ff )| 0x03C0));//è®©PC5-9è¾“å‡ºé«˜ç”µå¹³
+	GPIO_Write(GPIOC,((GPIOA->ODR & 0x00ff )| 0x03C0));//è®©PC5-9è¾“å‡ºé«˜ç”µå¹?
 		if((GPIOC->IDR & 0x001f)==0x0000)//è‹¥PC0-4å…¨ä¸º0ï¼Œåˆ™æ²¡æœ‰æŒ‰é”®æŒ‰ä¸‹
 		return -1;
 	else

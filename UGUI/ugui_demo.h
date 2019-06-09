@@ -22,6 +22,7 @@ UG_OBJECT obj_buff_wnd_2[MAX_OBJECTS];
 UG_BUTTON button2_1;
 UG_TEXTBOX textbox2_1;
 UG_TEXTBOX textbox2_2;
+UG_TEXTBOX textbox2_3;
 UG_IMAGE image2_1;
 
 /* Window 3 */

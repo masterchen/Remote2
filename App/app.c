@@ -11,12 +11,8 @@ static	CPU_STK	LED1_Stk[TASK_LED1_STK_SIZE];
 static  OS_TCB	GUI_TCB;		   					
 static	CPU_STK	GUI_Stk[TASK_GUI_STK_SIZE];
 
-u8 wakeup_readback[21632] = {0};	 
-u8 tmpData[20] = {0};
-
-u8 test[8];
-
-
+//u8 test[8];
+uint8_t logo_bmp[21632];
 #define KEYMSG_Q_NUM   1
 //#define DATAMSG_Q_NUM  4
 OS_Q KEY_Msg;
@@ -104,14 +100,18 @@ u8 Data_compare(u8 *p)
  */
 void Task_LED1(void *p_arg)
 {
-	int k;
+	//int k;
 	//char temp[10]={1,2,3,4,5,6,7,8,9,10};
 	//char *test[8]={"a","b","c","d","e","f","g","h"};
-	char dispbuf[1];
+	//char dispbuf[1];
 	u8 key;
     OS_ERR err;
     (void)p_arg;  
-	GUI_Demo();
+	
+	 SPI_Flash_Read(logo_bmp,0xC0000000,21632);	
+   OSTimeDly(500,OS_OPT_TIME_DLY,&err);
+	 //LCD_DrawBMP(50,50,154,154,logo_bmp);
+	 GUI_Demo();
 
 /*	
 	  tmpData[0] = '0';
@@ -139,16 +139,16 @@ void Task_LED1(void *p_arg)
 		LCD_FillColorRect(20,20,200,200,LCD_Color2Index_565(C_BROWN));
 		LCD_ShowString(120,200,200,16,16,"Show me1 !");
 	  */
-  while(1)
+  //while(1)
 		{
 			//for(k=0;k<8;k++)
 			{
 			  //LCD_ShowString(70,30,300,16,16,&USART_RX_BUF[2]);
 				//LCD_ShowxNum(172,150,USART_RX_BUF[2],3,16,0X20);
 				//LCD_ShowxNum(172,150,test[1],3,16,0X20);
-				if(USART_RX_BUF[1])
+				//if(USART_RX_BUF[1])
 				{
-					LCD_ShowxNum(12,150,USART_RX_BUF[1],20,16,0X20);
+					//LCD_ShowxNum(12,150,USART_RX_BUF[1],20,16,0X20);
 				}
 				//OSTimeDly(500,OS_OPT_TIME_DLY,&err);
 				//LCD_ShowxNum(12,150,USART_RX_BUF[3],20,16,0X20);
@@ -275,7 +275,7 @@ void Task_GUI(void *p_arg)
   (void)p_arg;   
 	
 	//LCD_ShowString(120,100,200,16,16,"task two here is !");
-
+/*
   while (1)
   {
 	
@@ -374,6 +374,7 @@ void Task_GUI(void *p_arg)
 //    LED2( OFF);
     OSTimeDlyHMSM(0, 0,0,200,OS_OPT_TIME_HMSM_STRICT,&err);
   }
+	*/
 }
 
 /* -------------------------------------end of file------------------------------------ */

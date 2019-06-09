@@ -73,6 +73,13 @@ void GUI_Demo(void)
    UG_ImageCreate( &window_2, &image2_1, IMG_ID_0, (UG_WindowGetInnerWidth( &window_2 )>>1) - (logo.width>>1), 40, 0, 0 );
    UG_ImageSetBMP( &window_2, IMG_ID_0, &logo );
 
+
+   UG_TextboxCreate( &window_2, &textbox2_3, TXB_ID_2,104, 40, 200, 60 );
+   UG_TextboxSetFont( &window_2, TXB_ID_2, &FONT_8X14 );
+   UG_TextboxSetText( &window_2, TXB_ID_2, "11AA" );
+   UG_TextboxSetForeColor( &window_2, TXB_ID_2, C_YELLOW_GREEN );
+   UG_TextboxSetBackColor( &window_2, TXB_ID_2, C_BLACK);
+   UG_PutChar('a',10,40,C_BLACK,C_YELLOW_GREEN);
    /* -------------------------------------------------------------------------------- */
    /* Create Window 3 (Benchmark Result)                                               */
    /* -------------------------------------------------------------------------------- */
@@ -98,11 +105,14 @@ void GUI_Demo(void)
   while(1)	
 	{
 	      UG_WindowShow( &window_1 );				
-				delay_ms(1000);				
+				delay_ms(2000);				
 				UG_Update();	//WindowsË¢ÐÂ
 				UG_WindowShow( &window_2 );
-				delay_ms(1000);
+				delay_ms(3000);
 				UG_Update();	//WindowsË¢ÐÂ
+				//UG_WindowShow( &window_3 );
+				//delay_ms(1000);
+				//UG_Update();	//WindowsË¢ÐÂ
 	}
 
 }

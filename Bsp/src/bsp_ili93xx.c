@@ -682,17 +682,18 @@ void LCD_FillColorRect( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uin
 
 void LCD_DrawBMP( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uint16_t *bmp )
 {
-	short temp;       /* Æðµã ÖÕµã´óÐ¡±È½Ï ½»»»Êý¾ÝÊ±µÄÖÐ¼ä±äÁ¿ */
-    uint16_t x,y;
+
+	short temp;        //Æðµã ÖÕµã´óÐ¡±È½Ï ½»»»Êý¾ÝÊ±µÄÖÐ¼ä±äÁ¿ 
+	uint16_t x,y;
 	uint16_t *pcolor;
 	
-    if( x0 > x1 )     /* XÖáÉÏÆðµã´óÓÚÖÕµã ½»»»Êý¾Ý */
+    if( x0 > x1 )     //XÖáÉÏÆðµã´óÓÚÖÕµã ½»»»Êý¾Ý 
     {
 	    temp = x1;
 		x1 = x0;
 		x0 = temp;   
     }
-    if( y0 > y1 )     /* YÖáÉÏÆðµã´óÓÚÖÕµã ½»»»Êý¾Ý */
+    if( y0 > y1 )     // YÖáÉÏÆðµã´óÓÚÖÕµã ½»»»Êý¾Ý 
     {
 		temp = y1;
 		y1 = y0;
@@ -706,7 +707,32 @@ void LCD_DrawBMP( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uint16_t 
 			LCD_SetPoint(x,y,*pcolor ++);
 		}
 	}	
+
+	/*
+  int i; 
+	//unsigned char picH,picL; 
+	uint16_t *pcolor;
+	pcolor = bmp;
+	LCD_SetWindows(x0,y0,x1,y1);//´°¿ÚÉèÖÃ
+    for(i=0;i<104*104;i++)
+	{	
+	 	//picL=*(p+i*2);	//Êý¾ÝµÍÎ»ÔÚÇ°
+		//picH=*(p+i*2+1);				
+		LCD_WR_DATA(*pcolor ++);  						
+		//LCD_WR_DATA(picH<<8|picL);  						
+	}	
+	
+	*/
 }
+
+/*
+void Gui_Drawbmp16WH(u16 x,u16 y,u16 width,u16 hight,const unsigned char *p) //ÏÔÊ¾Í¼Æ¬
+{
+
+	//»Ö¸´ÏÔÊ¾´°¿ÚÎªÈ«ÆÁ	
+
+}
+*/
 /******************************************************************************
 * Function Name  : PutChar
 * Description    : ½«LcdÆÁÉÏÈÎÒâÎ»ÖÃÏÔÊ¾Ò»¸ö×Ö·û
@@ -965,6 +991,140 @@ void Gui_Drawbmp16WH(u16 x,u16 y,u16 width,u16 hight,const unsigned char *p) //Ï
 	//»Ö¸´ÏÔÊ¾´°¿ÚÎªÈ«ÆÁ	
 
 }
+
+//ÏÔÊ¾Ò»¸öºº×Öµþ¼Ó£¿16*16
+
+void GUI_DrawFont16(u16 x, u16 y, u16 fc, u16 bc, u8 *s,u8 mode)
+{
+	u8 i,j;
+	u16 k;
+	u16 HZnum;
+	u16 x0=x;
+	HZnum=sizeof(tfont16)/sizeof(typFNT_GB16);	//¡Á??¡¥¨ª3??oo¡Á?¨ºy??
+	
+			
+	for (k=0;k<HZnum;k++) 
+	{
+	  if ((tfont16[k].Index[0]==*(s))&&(tfont16[k].Index[1]==*(s+1)))
+	  { 	LCD_SetWindows(x,y,x+16-1,y+16-1);
+		    for(i=0;i<16*2;i++)
+		    {
+				for(j=0;j<8;j++)
+		    	{	
+					if(!mode) //¡¤?¦Ìt?¨®¡¤?¨º?
+					{
+						if(tfont16[k].Msk[i]&(0x80>>j))	LCD_DrawPoint_16Bit(fc);
+						else LCD_DrawPoint_16Bit(bc);
+					}
+					else
+					{
+						POINT_COLOR=fc;
+						if(tfont16[k].Msk[i]&(0x80>>j))	LCD_DrawPoint(x,y);//?-¨°???¦Ì?
+						x++;
+						if((x-x0)==16)
+						{
+							x=x0;
+							y++;
+							break;
+						}
+					}
+
+				}
+				
+			}
+			
+			
+		}				  	
+		continue;  //2¨¦?¨°¦Ì???¨®|¦Ì??¨®¡Á??a¨¢¡é?¡ä¨ª?3?¡ê?¡¤¨¤?1?¨¤??oo¡Á????¡ä¨¨??¡ê¡ä?¨¤¡ä¨®¡ã?¨¬
+	}
+
+	LCD_SetWindows(0,0,lcddev.width-1,lcddev.height-1);//???¡ä¡ä¡ã?¨²?a¨¨??¨¢  
+} 
+
+/*
+void Gui_Show_ptfont(u16 x,u16 y,u16 xend,u16 yend,u8 offset,u16 color,u16 size,u8* chr,u8 mode)
+{
+	u8 temp;
+	u8 pos,t;
+	u8 tempoff;
+	u16 y0=y;					   
+	u8 dzk[32];
+
+	if(size!=12&&size!=16)return;	//²»Ö§³ÖµÄsize
+	Get_HzMat(chr,dzk,size);		//µÃµ½ÏàÓ¦´óÐ¡µÄµãÕóÊý¾Ý
+	tempoff=offset;
+	if(mode==0) 	//·Çµþ¼Ó·½Ê½
+	{
+		for(pos=0;pos<size*2;pos++)
+		{	
+			if(x>xend)break;//µ½´ïÖÕµã×ø±ê
+			temp=dzk[pos];	//µÃµ½µãÕóÊý¾Ý						  
+			if(tempoff==0)	//Æ«ÒÆµØÖ·µ½ÁË
+			{
+				for(t=0;t<8;t++)
+				{			
+					if(y<=yend)
+					{
+						if(temp&0x80)gui_phy.draw_point(x,y,color); 
+						else gui_phy.draw_point(x,y,gui_phy.back_color); 
+					} 
+					temp<<=1;
+					y++;
+					if((y-y0)==size)
+					{
+						y=y0;
+						x++;
+						break;
+					}				
+				} 
+			}else
+			{
+				y+=8;
+				if((y-y0)>=size)//´óÓÚÒ»¸ö×ÖµÄ¸ß¶ÈÁË
+				{
+					y=y0;		//y×ø±ê¹éÁã
+					tempoff--;	 
+				}
+			}	
+		}	
+	}else		//µþ¼Ó·½Ê½
+	{
+		for(pos=0;pos<size*2;pos++)
+		{	
+			if(x>xend)break;//µ½´ïÖÕµã×ø±ê
+			temp=dzk[pos];	//µÃµ½µãÕóÊý¾Ý						  
+			if(tempoff==0)	//Æ«ÒÆµØÖ·µ½ÁË
+			{
+				for(t=0;t<8;t++)
+				{			
+					if((y<=yend)&&(temp&0x80))
+					{
+						if(mode==0X01)gui_phy.draw_point(x,y,color);
+						else if(mode==0x02)gui_draw_bigpoint(x,y,color);	 
+					} 
+					temp<<=1;
+					y++;
+					if((y-y0)==size)
+					{
+						y=y0;
+						x++;
+						break;
+					}				
+				} 
+			}else
+			{
+				y+=8;
+				if((y-y0)>=size)//´óÓÚÒ»¸ö×ÖµÄ¸ß¶ÈÁË
+				{
+					y=y0;		//y×ø±ê¹éÁã
+					tempoff--;	 
+				}
+			}	
+		}
+ 	}							 
+}	
+
+*/
 
 /*
 void LCD_ShowCharone(u16 x,u16 y,u16 fc, u16 bc, u8 num,u8 size,u8 mode)

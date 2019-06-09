@@ -6654,6 +6654,12 @@ UG_RESULT UG_TextboxSetText( UG_WINDOW* wnd, UG_U8 id, char* str )
    return UG_RESULT_OK;
 }
 
+
+
+
+
+
+
 UG_RESULT UG_TextboxSetFont( UG_WINDOW* wnd, UG_U8 id, const UG_FONT* font )
 {
    UG_OBJECT* obj=NULL;
