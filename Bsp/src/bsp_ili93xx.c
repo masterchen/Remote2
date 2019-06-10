@@ -992,6 +992,7 @@ void Gui_Drawbmp16WH(u16 x,u16 y,u16 width,u16 hight,const unsigned char *p) //Ï
 
 }
 
+/*
 //ÏÔÊ¾Ò»¸öºº×Öµþ¼Ó£¿16*16
 
 void GUI_DrawFont16(u16 x, u16 y, u16 fc, u16 bc, u8 *s,u8 mode)
@@ -1041,9 +1042,11 @@ void GUI_DrawFont16(u16 x, u16 y, u16 fc, u16 bc, u8 *s,u8 mode)
 	LCD_SetWindows(0,0,lcddev.width-1,lcddev.height-1);//???¡ä¡ä¡ã?¨²?a¨¨??¨¢  
 } 
 
+*/
 /*
 void Gui_Show_ptfont(u16 x,u16 y,u16 xend,u16 yend,u8 offset,u16 color,u16 size,u8* chr,u8 mode)
-{
+{
+
 	u8 temp;
 	u8 pos,t;
 	u8 tempoff;

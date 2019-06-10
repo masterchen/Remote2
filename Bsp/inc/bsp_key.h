@@ -15,11 +15,6 @@
 //V1.1修改说明
 //修改按键扫描函数，使整个代码可以支持SWD下载。
 //////////////////////////////////////////////////////////////////////////////////	 
-typedef struct s_KeyMap{
-	unsigned  short KeyID;
-	unsigned  short KeyCOde;
-}sKeyMap;
-extern const sKeyMap _sKeyMap[];
 
 typedef union u_KeyCode{
 	unsigned  short KeyValue; 
@@ -45,6 +40,10 @@ typedef enum
 	Button_WAKEUP = 2
 } Button_TypeDef;
 
+
+
+
+
 typedef struct  
 {   GPIO_TypeDef*       BUTTON_PORT ;
     uint16_t            BUTTON_PIN ;
@@ -53,7 +52,7 @@ typedef struct
 
 	 
 void KEY_Init(void);//IO初始化
-u8 KEY_Scan(void); //按键扫描函数			
+u8 Key_Scan(void);
 
 #endif
 

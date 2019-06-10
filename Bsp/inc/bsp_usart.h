@@ -1,50 +1,88 @@
-#ifndef __USART_H
-#define __USART_H
+/*
+*********************************************************************************************************
+*
+*	模块名称 : 串口中断+FIFO驱动模块
+*	文件名称 : bsp_uart_fifo.h
+*	版    本 : V1.0
+*	说    明 : 头文件
+*
+*	
+*
+*********************************************************************************************************
+*/
+
+#ifndef _USART_H_
+#define _USART_H_
 #include "stdio.h"	
 #include "sys.h" 
 #include "stm32f10x.h"
-//////////////////////////////////////////////////////////////////////////////////	 
-//本程序只供学习使用，未经作者许可，不得用于其它任何用途
-//Mini STM32开发板
-//串口1初始化		   
-//正点原子@ALIENTEK
-//技术论坛:www.openedv.csom
-//修改日期:2011/6/14
-//版本：V1.4
-//版权所有，盗版必究。
-//Copyright(C) 正点原子 2009-2019
-//All rights reserved
-//********************************************************************************
-//V1.3修改说明 
-//支持适应不同频率下的串口波特率设置.
-//加入了对printf的支持
-//增加了串口接收命令功能.
-//修正了printf第一个字符丢失的bug
-//V1.4修改说明
-//1,修改串口初始化IO的bug
-//2,修改了USART_RX_STA,使得串口最大接收字节数为2的14次方
-//3,增加了USART_REC_LEN,用于定义串口最大允许接收的字节数(不大于2的14次方)
-//4,修改了EN_USART1_RX的使能方式
-////////////////////////////////////////////////////////////////////////////////// 	
-#define USART_REC_LEN  			2  	//定义最大接收字节数 200
-#define EN_USART1_RX 			1		//使能（1）/禁止（0）串口1接收
 
-#define tbuf 50
 
-extern u8  USART_RX_BUF[USART_REC_LEN]; //接收缓冲,最大USART_REC_LEN个字节.末字节为换行符 
-extern u16 USART_RX_STA;         		//接收状态标记	
-//如果想串口中断接收，请不要注释以下宏定义
-void USART1_Init(u32 bound);
-void USART2_Init(void);
+#define	UART1_FIFO_EN	1
+#define	UART2_FIFO_EN	1
+
+ 
+
+typedef enum
+{
+    CB_TYPE_SENDBEFORE,
+    CB_TYPE_SENDOVER,
+    CB_TYPE_NEWCOME,
+}eCB_TYPE;
+
+/* 定义端口号 */
+typedef enum
+{
+	COM1 = 0,	/* USART1  PA9, PA10 或  PB6, PB7*/
+	COM2 = 1,	/* USART2, PD5,PD6 或 PA2, PA3 */
+	COM3 = 2,	/* USART3, PB10, PB11 */
+	COM4 = 3,	/* UART4, PC10, PC11 */
+	COM5 = 4,	/* UART5, PC12, PD2 */
+	COM6 = 5,	/* USART6, PC6, PC7 */
+	COM_MAX,
+}COM_PORT_E;
+
+extern s32 s_BaudRate[COM_MAX];
+
+/* 定义串口波特率和FIFO缓冲区大小，分为发送缓冲区和接收缓冲区, 支持全双工 */
+#if UART1_FIFO_EN == 1
+	#define UART1_BAUD			s_BaudRate[COM1]//115200
+	#define UART1_TX_BUF_SIZE	1*64
+	#define UART1_RX_BUF_SIZE	1*64
 #endif
 
-void UART_PutChar(USART_TypeDef* USARTx, uint8_t Data);
-void UART_PutStr (USART_TypeDef* USARTx, uint8_t *str);  
-void USART_SendString(USART_TypeDef* USARTx, char *str);
+#if UART2_FIFO_EN == 1
+	#define UART2_BAUD			s_BaudRate[COM2]//38400//9600
+	#define UART2_TX_BUF_SIZE	1*64
+	#define UART2_RX_BUF_SIZE	1*64
+#endif
+ 
 
-void Uart1SendStr(u8 *s);
-void Uart2SendStr(u8 *s);
+/* 串口设备结构体 */
+typedef struct
+{
+	USART_TypeDef *uart;		/* STM32内部串口设备指针 */
+	volatile uint8_t *pTxBuf;			/* 发送缓冲区 */
+	volatile uint8_t *pRxBuf;			/* 接收缓冲区 */
+	volatile uint16_t usTxBufSize;		/* 发送缓冲区大小 */
+	volatile uint16_t usRxBufSize;		/* 接收缓冲区大小 */
+	volatile uint16_t usTxWrite;			/* 发送缓冲区写指针 */
+	volatile uint16_t usTxRead;			/* 发送缓冲区读指针 */
+	volatile uint16_t usTxCount;			/* 等待发送的数据个数 */
 
+	volatile uint16_t usRxWrite;			/* 接收缓冲区写指针 */
+	volatile uint16_t usRxRead;			/* 接收缓冲区读指针 */
+	volatile uint16_t usRxCount;			/* 还未读取的新数据个数 */
 
+}UART_T;
 
+void bsp_InitUart(COM_PORT_E _ucPort, s32 BaudRate);
+void comSendBuf(COM_PORT_E _ucPort, uint8_t *_ucaBuf, uint16_t _usLen);
+void comSendChar(COM_PORT_E _ucPort, uint8_t _ucByte);
+uint8_t comGetChar(COM_PORT_E _ucPort, uint8_t *_pByte);
+
+void comClearTxFifo(COM_PORT_E _ucPort);
+void comClearRxFifo(COM_PORT_E _ucPort);
+
+#endif
 

@@ -621,6 +621,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\App\os_cfg_app.h</FilePath>
             </File>
+            <File>
+              <FileName>app_windowmanager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\App\app_windowmanager.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_communication.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\App\app_communication.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -675,6 +685,11 @@
               <FileName>bsp_key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Bsp\src\bsp_key.c</FilePath>
+            </File>
+            <File>
+              <FileName>malloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Bsp\src\malloc.c</FilePath>
             </File>
           </Files>
         </Group>

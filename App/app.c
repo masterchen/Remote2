@@ -8,8 +8,81 @@ extern	OS_TCB	StartUp_TCB;
 static  OS_TCB	LED1_TCB;		   				
 static	CPU_STK	LED1_Stk[TASK_LED1_STK_SIZE];	   
 
+static  OS_TCB	KEY_TCB;		   					
+static	CPU_STK	KEY_Stk[TASK_KEY_STK_SIZE];
+
+
 static  OS_TCB	GUI_TCB;		   					
 static	CPU_STK	GUI_Stk[TASK_GUI_STK_SIZE];
+
+const sKeyMap KeyMap[] = {
+	{Key_SpeedAdj,	        0x01,0xff},
+	{Key_LegCntSwitch,	    0x01,0xff},
+	{Key_BackUp,	        0x01,0x24},
+	{Key_BackDown,	        0x01,0x15},
+	{Key_WaistUp,	        0x01,0x27},
+	{Key_WaistDown,	        0x01,0x26},
+	{Key_LegUp,	            0x1,0x13},
+	{Key_LegDown,	        0x1,0x14},
+	{Key_Trendelenburg,	    0x1,0x17},
+	{Key_AntiTrendelenburg,	0x1,0x21},
+	{key_Up,	            0x1,0x08},
+	{Key_Down,	            0x1,0x09},
+	{Key_LeftLean,	        0x1,0x15},
+	{Key_RightLean,	        0x1,0x16},
+	{Key_HeadForward,	    0x1,0x22},
+	{Key_FootForward,	    0x1,0x21},
+	{Key_ReverseFunc,	    0x1,0x00},
+	{Key_UnLock,	        0x1,0x02},
+	{Key_Lock,	            0x1,0x01},
+	{Key_Start,	            0x1,0xff},
+	{Key_Stop,	            0x1,0xff},
+	{Key_Reset,	            0x1,0xff},
+	{Key_Memo,	            0x1,0xff},
+	{Key_PageUp,	        0x1,0xff},
+	{Key_PageDown,	        0x1,0xff},
+	{Key_Func1,	            0x04,0xff},
+	{Key_Func2,	            0x07,0xff},
+	{key_ReadData,	        0xEA,0x14},// 用于读取数据
+	{Key_Max,	            0xff,0xff},
+};
+
+
+
+const sKeyMap2 KeyMap2[] = {
+	{Key_SpeedAdj,	        0x01},
+	{Key_LegCntSwitch,	    0x01},
+	{Key_BackUp,	        0x01},
+	{Key_BackDown,	        0x01},
+	{Key_WaistUp,	        0x01},
+	{Key_WaistDown,	        0x01},
+	{Key_LegUp,	            0x1},
+	{Key_LegDown,	        0x1},
+	{Key_Trendelenburg,	    0x1},
+	{Key_AntiTrendelenburg,	0x1},
+	{key_Up,	            0x1},
+	{Key_Down,	            0x1},
+	{Key_LeftLean,	        0x1},
+	{Key_RightLean,	        0x1},
+	{Key_HeadForward,	    0x1},
+	{Key_FootForward,	    0x1},
+	{Key_ReverseFunc,	    0x1},
+	{Key_UnLock,	        0x1},
+	{Key_Lock,	            0x1},
+	{Key_Start,	            0x1},
+	{Key_Stop,	            0x1},
+	{Key_Reset,	            0x1},
+	{Key_Memo,	            0x1},
+	{Key_PageUp,	        0x1},
+	{Key_PageDown,	        0x1},
+	{Key_Func1,	            0x4},
+	{Key_Func2,	            0x7},
+	{key_ReadData,	        0xEA},// 用于读取数据
+	{Key_Max,	            0xff},
+};
+
+#define KEYMAP_MAX_SIZE   (sizeof(KeyMap)/sizeof(sKeyMap))	
+
 
 //u8 test[8];
 uint8_t logo_bmp[21632];
@@ -56,21 +129,40 @@ void Task_Start(void *p_arg)
                (OS_OPT      )(OS_OPT_TASK_STK_CHK | 
                               OS_OPT_TASK_STK_CLR),	        // 任务选项
                (OS_ERR     *)&err);						              // 返回值
+
+
+	//创建任务KEY 扫描
+	OSTaskCreate((OS_TCB	 *)&KEY_TCB,								// 任务控制块指针		   
+			   (CPU_CHAR   *)"KEY",									// 任务名称
+			   (OS_TASK_PTR )Task_Key, 							// 任务代码指针
+			   (void	   *)0, 										// 传递给任务的参数parg
+			   (OS_PRIO 	)TASK_KEY_PRIO,						// 任务优先级
+			   (CPU_STK    *)&KEY_Stk[0],						  // 任务堆栈基地址
+			   (CPU_STK_SIZE)TASK_KEY_STK_SIZE/10, 		  // 堆栈剩余警戒线
+			   (CPU_STK_SIZE)TASK_KEY_STK_SIZE,				  // 堆栈大小
+			   (OS_MSG_QTY	)0, 										// 可接收的最大消息队列数
+			   (OS_TICK 	)0, 										// 时间片轮转时间
+			   (void	   *)0, 										// 任务控制块扩展信息
+			   (OS_OPT		)(OS_OPT_TASK_STK_CHK | 
+							  OS_OPT_TASK_STK_CLR), 		// 任务选项
+			   (OS_ERR	   *)&err); 	
+
+
 							 
-		OSTaskCreate((OS_TCB     *)&GUI_TCB,					  
-               (CPU_CHAR   *)"GUI",						
-               (OS_TASK_PTR )Task_GUI,				
-               (void       *)0,							
-               (OS_PRIO     )TASK_GUI_PRIO,				
-               (CPU_STK    *)&GUI_Stk[0],				
-               (CPU_STK_SIZE)TASK_GUI_STK_SIZE/10,		
-               (CPU_STK_SIZE)TASK_GUI_STK_SIZE,			
-               (OS_MSG_QTY  )0,						
-               (OS_TICK     )0,							
-               (void       *)0,							
-               (OS_OPT      )(OS_OPT_TASK_STK_CHK | 
-                              OS_OPT_TASK_STK_CLR),	 
-               (OS_ERR     *)&err);	
+	OSTaskCreate((OS_TCB     *)&GUI_TCB,					  
+           (CPU_CHAR   *)"GUI",						
+           (OS_TASK_PTR )Task_GUI,				
+           (void       *)0,							
+           (OS_PRIO     )TASK_GUI_PRIO,				
+           (CPU_STK    *)&GUI_Stk[0],				
+           (CPU_STK_SIZE)TASK_GUI_STK_SIZE/10,		
+           (CPU_STK_SIZE)TASK_GUI_STK_SIZE,			
+           (OS_MSG_QTY  )0,						
+           (OS_TICK     )0,							
+           (void       *)0,							
+           (OS_OPT      )(OS_OPT_TASK_STK_CHK | 
+                          OS_OPT_TASK_STK_CLR),	 
+           (OS_ERR     *)&err);	
 							 
                
   //任务删除自己	
@@ -107,18 +199,12 @@ void Task_LED1(void *p_arg)
 	u8 key;
     OS_ERR err;
     (void)p_arg;  
-	
-	 SPI_Flash_Read(logo_bmp,0xC0000000,21632);	
-   OSTimeDly(500,OS_OPT_TIME_DLY,&err);
+	SPI_Flash_Read(logo_bmp,0xC0000000,21632);	
+    OSTimeDly(500,OS_OPT_TIME_DLY,&err);
 	 //LCD_DrawBMP(50,50,154,154,logo_bmp);
-	 GUI_Demo();
+	 //GUI_Demo();
 
-/*	
-	  tmpData[0] = '0';
-		tmpData[1] = '0';
-	  tmpData[3] = '0';
-		tmpData[4] = '0';
-*/		
+	
 /*	
 		UG_FillScreen(C_BLACK);
 	  UG_WindowCreate(&window_1,obj_buff_wnd_1,MAX_OBJECTS,window_1_callback);
@@ -208,6 +294,32 @@ while(1)
   }
 
 
+
+
+void Task_Key(void *p_arg)
+{
+    u8 key;
+
+  OS_ERR err;
+	(void)p_arg; 
+	while (1)
+	 {
+	
+		key=Key_Scan();
+		if(key)
+		{
+		   LCD_ShowString(120,200,200,16,16,"got key");
+		   OSQPost((OS_Q*	  )&KEY_Msg,
+					(void*	  )&key,
+					(OS_MSG_SIZE)1,
+					(OS_OPT 	)OS_OPT_POST_FIFO,
+					(OS_ERR*	)&err);
+		}
+		OSTimeDlyHMSM(0, 0,0,10,OS_OPT_TIME_HMSM_STRICT,&err);
+	 }
+
+}
+
 /* 
  * 函数名：Task_LED2
  * 描述  : 	LED任务2，
@@ -218,8 +330,8 @@ while(1)
  */
 void Task_LED2(void *p_arg)
 {
-  OS_ERR err;
-  (void)p_arg;                	
+	OS_ERR err;
+	(void)p_arg;                	
 
 	
 //    LED2( ON );
@@ -252,129 +364,42 @@ void Task_LED3(void *p_arg)
 }
 
 void Task_GUI(void *p_arg)
-
-/*{
-  OS_ERR err;
-  (void)p_arg;		
-
-	
-	//GUIDEMO_Main();
-	//延时
-	while(1)
-	{
-		OSTimeDly(1,OS_OPT_TIME_DLY,&err);
-		}
-}
-*/
-
 {
-	u8 *key;
+	 
+	u8* key;
+	int n = 0;
 	OS_MSG_SIZE size;
-	
-  OS_ERR err;
-  (void)p_arg;   
-	
-	//LCD_ShowString(120,100,200,16,16,"task two here is !");
-/*
-  while (1)
-  {
-	
+
+	OS_ERR err;
+    (void)p_arg;
+	UGUI_WindowInit();
+
+	while (1)
+	{		
 		key=OSQPend((OS_Q*          )&KEY_Msg,
 		           (OS_TICK         )0,
-		           (OS_OPT          )OS_OPT_PEND_BLOCKING,
+		           (OS_OPT          )OS_OPT_PEND_NON_BLOCKING,
 		           (OS_MSG_SIZE*    )&size,
 							 (CPU_TS*         )0,
 		           (OS_ERR*         )&err);
-		
-		switch(*key)
+		if(key != NULL)
 		{
-			case 3:
-				//GPIO_SetBits(GPIOE,GPIO_Pin_6);
-				SPI_Flash_Read(wakeup_readback,0xC0000000,21632); 	 
-				Gui_Drawbmp16WH(50,100,104,104,wakeup_readback);
-				Uart1SendStr( "\r\n03 03 03 03 03 03 03 03\n");
-				break;
-			case 4:		
-				GPIO_ResetBits(GPIOE,GPIO_Pin_6);
-				Uart1SendStr( "\r\n04 04 04 04 04 04 04 04\n");
-				break;
-			case 5:
-				Uart1SendStr( "\r\n05 05 05 05 05 05 05 05\n");
-				break;
-			case 6:
-				Uart1SendStr( "\r\n06 06 06 06 06 06 06 06\n");
-				break;
-			case 7:			
-				Uart1SendStr( "\r\n07 07 07 07 07 07 07 07\n");
-				break;
-			case 8:			
-				Uart1SendStr( "\r\n08 08 08 08 08 08 08 08\n");
-				break;
-			case 9:			
-				Uart1SendStr( "\r\n09 09 09 09 09 09 09 09\n");
-				break;
-			case 10:		
-				Uart1SendStr( "\r\n10 10 10 10 10 10 10 10\n");
-				break;
-			case 11:			
-				Uart1SendStr( "\r\n11 11 11 11 11 11 11 11\n");
-				break;
-			case 12:			
-				Uart1SendStr( "\r\n12 12 12 12 12 12 12 12\n");
-				break;
-			case 13:			
-				Uart1SendStr( "\r\n13 13 13 13 13 13 13 13\n");
-				break;
-			case 14:			
-				Uart1SendStr( "\r\n14 14 14 14 14 14 14 14\n");
-				break;
-			case 15:			
-				Uart1SendStr( "\r\n15 07 07 07 07 07 07 07\n");
-				break;
-			case 16:		
-				Uart1SendStr( "\r\n16 07 07 07 07 07 07 07\n");
-				break;
-			case 17:			
-				Uart1SendStr( "\r\n17 07 07 07 07 07 07 07\n");
-				break;
-			case 18:			
-				Uart1SendStr( "\r\n18 07 07 07 07 07 07 07\n");
-				break;
-			case 19:			
-				Uart1SendStr( "\r\n19 07 07 07 07 07 07 07\n");
-				break;
-			case 20:			
-				Uart1SendStr( "\r\n20 07 07 07 07 07 07 07\n");
-				break;
-			case 21:		
-				Uart1SendStr( "\r\n21 07 07 07 07 07 07 07\n");
-				break;
-			case 22:			
-				Uart1SendStr( "\r\n22 07 07 07 07 07 07 07\n");
-				break;
-			case 23:			
-				Uart1SendStr( "\r\n23 07 07 07 07 07 07 07\n");
-				break;
-			case 24:		
-				Uart1SendStr( "\r\n24 07 07 07 07 07 07 07\n");
-				break;
-			case 25:		
-				Uart1SendStr( "\r\n25 07 07 07 07 07 07 07\n");
-				break;
-			case 26:		
-				Uart1SendStr( "\r\n26 07 07 07 07 07 07 07\n");
-				break;
-			case 27:			
-				Uart1SendStr( "\r\n27 07 07 07 07 07 07 07\n");
-				break;
+			for(n =0; n<KEYMAP_MAX_SIZE; n++){
+				if(KeyMap[n].KeyCode == *key){
+					
+					break;
+				}
+			}
+			UGUI_WindowStateHandler(KeyMap[n].KeyType);
+			appCOM_SendCmdCode(KeyMap[n].CmdCode);
+		} 
+		else
+		{
+			OSTimeDlyHMSM(0, 0,0,30,OS_OPT_TIME_HMSM_STRICT,&err);
 		}
-	
-//    LED2( ON );
-//    OSTimeDlyHMSM(0, 0,0,200,OS_OPT_TIME_HMSM_STRICT,&err);	 //延时阻塞200ms
-//    LED2( OFF);
-    OSTimeDlyHMSM(0, 0,0,200,OS_OPT_TIME_HMSM_STRICT,&err);
-  }
-	*/
+
+		
+	}
 }
 
 /* -------------------------------------end of file------------------------------------ */

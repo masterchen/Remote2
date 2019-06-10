@@ -1,7 +1,11 @@
+#ifdef USE_DEMO
+
 #include "ugui_demo.h"
 #include "image.h"
 #include "delay.h"
 int i;
+
+
 void GUI_Demo(void)
 {
 		/* Init ?UI */
@@ -116,3 +120,5 @@ void GUI_Demo(void)
 	}
 
 }
+
+#endif

@@ -39,8 +39,8 @@ void BSP_Init(void)
 	 //IO初始化
 
 	//串口初始化
-	USART1_Init(9600);
-	USART2_Init();
+	bsp_InitUart(COM1,9600);
+	bsp_InitUart(COM2,9600);
 
 	/* 初始化gui */
 /*

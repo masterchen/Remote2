@@ -65,8 +65,8 @@ void KEY_Init(void) //IO³õÊ¼»¯
 }
 
 u8 Key_Scan(void)
-	{ 
-	  int keyValue=0;
+{ 
+	 u8 keyValue=0;
 		//u8 keyValue[5]={0x00,0x00,0x00,0x00,0x00};
 		//int x1,x2,x3,x4,x5;
 	//GPIO_Write(GPIOC,(GPIOC->ODR & 0x0000));//è®©PC5-9è¾“å‡ºé«˜ç”µå¹?
@@ -149,7 +149,7 @@ u8 Key_Scan(void)
 				 break;			
 		}
 		
-	GPIO_Write(GPIOC,(GPIOC->ODR & 0xfc1f )| 0x0080);//?PC5-9??0001,PC5?,??PC0-4	
+	  GPIO_Write(GPIOC,(GPIOC->ODR & 0xfc1f )| 0x0080);//?PC5-9??0001,PC5?,??PC0-4	
 	  switch(GPIOC->IDR&0x001f )
 		{
 
