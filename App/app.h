@@ -82,6 +82,9 @@ void UGUI_ShowSpash(void);
 
 void UGUI_ShowMainWindow(void);
 
+void UGUI_ShowSubWindow(void);
+
+
 void UGUI_WindowStateHandler(eKeyType event);
 
 u8 appCOM_SendCmdCode(u8 _CmdCode);

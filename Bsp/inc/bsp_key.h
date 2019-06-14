@@ -33,23 +33,6 @@ typedef enum e_KeyState{
 }eKeyState;
 
 
-typedef enum 
-{  
-	Button_KEY0 = 0,
-	Button_KEY1 = 1,
-	Button_WAKEUP = 2
-} Button_TypeDef;
-
-
-
-
-
-typedef struct  
-{   GPIO_TypeDef*       BUTTON_PORT ;
-    uint16_t            BUTTON_PIN ;
-    GPIOMode_TypeDef    BUTTON_MODE;
-}Button_PinModeDef;	
-
 	 
 void KEY_Init(void);//IO≥ı ºªØ
 u8 Key_Scan(void);

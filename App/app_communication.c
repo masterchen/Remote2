@@ -1,7 +1,7 @@
 #include "bsp.h"
 #include "crc16.h"
 #include "app.h"
-#define COM_TIMEOUT   50 //50ms
+#define COM_TIMEOUT   80 //50ms
 
 
 u8 appCOM_SendCmdCode(u8 _CmdCode)

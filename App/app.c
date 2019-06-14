@@ -39,8 +39,8 @@ const sKeyMap KeyMap[] = {
 	{Key_Stop,	            0x1,0xff},
 	{Key_Reset,	            0x1,0xff},
 	{Key_Memo,	            0x1,0xff},
-	{Key_PageUp,	        0x1,0xff},
-	{Key_PageDown,	        0x1,0xff},
+	{Key_PageUp,	        0x05,0xff},
+	{Key_PageDown,	        0x06,0xff},
 	{Key_Func1,	            0x04,0xff},
 	{Key_Func2,	            0x07,0xff},
 	{key_ReadData,	        0xEA,0x14},// 用于读取数据
