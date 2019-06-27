@@ -21,6 +21,74 @@
 #define KEY_REPEAT_CNT			(25)
 */
 GPIO_InitTypeDef GPIO_InitStructure;
+
+
+typedef struct{
+	unsigned char KeyStateIndex; 　　// 当前状态索引号
+	unsigned char KeyEnterState; 　　//按下“回车”键时转向的状态索引号
+	unsigned char KeyBackState; 　　// 按下“退回”键时转向的状态索引号
+	unsigned char KeyLeftState; 　　//按下“向下”键时转向的状态索引号
+	unsigned char KeyRightState; 　　// 按下“向上”键时转向的状态索引号
+	unsigned char KeySetState;     //按下设置键转向的状态索引号
+	void (*CurrentOperate)(); 　　//当前状态应该执行的功能操作
+}KbdTabStruct;
+
+#define SIZE_OF_KEYBD_MENU     55 　　/ / 菜单总长度 
+
+void (*KeyFuncPtr)() ;
+
+KbdTabStruct const MainKeyTab[SIZE_OF_KEYBD_MENU]={
+
+//index,leftsur,left,right,rightsur,mix
+{0,1,2,3,4,5,(*fastmem_select_mem_window)},
+{1,2,3,4,5,0,(*fastmem_select_exe_window)},
+{2,3,4,5,0,1,(*UGUI_ShowSubWindow)},
+{3,4,5,0,1,2,(*UGUI_ShowMainWindow)},
+{4,5,0,1,2,3,(*UGUI_ShowSpasha)}，
+{5,0,1,2,3,4,(*UGUI_ShowSpash)},
+};
+
+void GetKeylnput (int key)
+{
+
+  static int Key_Fun = 0;
+
+　switch(key){
+	
+　 case Key_Func1: 	   //回车键,找出新的菜单状态编号
+		Key_Fun = MainKeyTab[Key_Fun].KeyEnterState ;
+　　　	  break;
+　 case Key_Func2: 		//向下键,找出新的菜单状态编号
+		Key_Fun = MainKeyTab[Key_Fun].KeyBackState ;
+　　		break;
+   case Key_PageUp: 	  //向上键,找出新的菜单状态编号
+		Key_Fun = MainKeyTab[Key_Fun].KeyLeftState ;
+　　　	  break;
+　 case Key_PageDown:		  //回退键,找出新的菜单状态编号
+		Key_Fun = MainKeyTab[Key_Fun].KeyRightState ;
+　　　	  break;
+　 case 0;
+　　　 return; 　　// 错误的处理
+　　　 break;
+　　　}
+
+　 KeyFuncPtr = MainKeyTab[Key_Fun].CurrentOperate ;
+
+　(*KeyFuncPtr)() ; 　　// 执行当前按键的操作
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 const sKeyMap _sKeyMap[]={
 	{cmdkey_multifunction1,   0x33 }       //k24
@@ -90,27 +158,27 @@ u8 Key_Scan(void)
 		{
 
 			case 0x0001 : 
-				 keyValue=3;
+				 keyValue=0x03;
 	         		
 				 //keyValue[1]=0x0021;			      
 				 break;
 			case 0x0002 : 
-				 keyValue=4;
+				 keyValue=0x04;
 	         		
 				 //keyValue[1]=0x0022;			      
 				 break;
 			case 0x0004 : 
-				 keyValue=5;
+				 keyValue=0x05;
 	         		
 				 //keyValue[1]=0x0024;			      
 				 break;
 			case 0x0008 : 
-				 keyValue=6;
+				 keyValue=0x06;
 	         		
 				 //keyValue[1]=0x0028;			      
 				 break;
 			case 0x0010 : 
-				keyValue=7;
+				keyValue=0x07;
 	         		
 				//keyValue[1]=0x0030;
 				break;	
@@ -123,27 +191,27 @@ u8 Key_Scan(void)
 		{
 
 			case 0x0001 : 
-				keyValue=8;
+				keyValue=0x08;
 	         		
 				 //keyValue[2]=0x0041;			      
 				break;
 			case 0x0002 : 
-				keyValue=9;
+				keyValue=0x09;
 	         		
 				 //keyValue[2]=0x0042;			      
 				break;
 			case 0x0004 : 
-				keyValue=10;
+				keyValue=0x0a;
 	         		
 				 //keyValue[2]=0x0044;			      
 				break;	
 			case 0x0008 : 
-				keyValue=11;
+				keyValue=0x0b;
 	         		
 				 //keyValue[2]=0x0048;			      
 				break;	
 			case 0x0010 : 
-				 keyValue=12;
+				 keyValue=0x0c;
 	         		
 				 //keyValue[2]=0x0050;			      
 				 break;			
@@ -154,27 +222,27 @@ u8 Key_Scan(void)
 		{
 
 			case 0x0001 : 
-				 keyValue=13;
+				 keyValue=0x0d;
 	         		
 				 //keyValue[3]=0x0081;			      
 				 break;
 			case 0x0002 : 
-				 keyValue=14;
+				 keyValue=0x0e;
 	         		
 				 //keyValue[3]=0x0082;			      			      
 				 break;
 			case 0x0004 : 
-				 keyValue=15;
+				 keyValue=0x0f;
 	         		
 				 //keyValue[3]=0x0084;			      
 				 break; 
 			case 0x0008 : 
-				 keyValue=16;
+				 keyValue=0x10;
 	         		
 				 //keyValue[3]=0x0088;			      
 				 break;	
 			case 0x0010 : 
-				 keyValue=17;
+				 keyValue=0x11;
 	         		
 				 //keyValue[3]=0x0090;			      
 				 break;		
@@ -185,21 +253,21 @@ u8 Key_Scan(void)
 		{
 
 			case 0x0001 : 
-				 keyValue=18;
+				 keyValue=0x12;
 				 //keyValue[3]=0x0090;			      
 				 break;
 			case 0x0002 : 
-				 keyValue=19;
+				 keyValue=0x13;
 				 break;
 			case 0x0004 : 
-				 keyValue=20;
+				 keyValue=0x14;
 				 break; 
 			case 0x0008 : 
-				 keyValue=21;
+				 keyValue=0x15;
 	         		
 				 break;
 			case 0x0010 : 
-				 keyValue=22;
+				 keyValue=0x16;
 	         		
 				 break;
 		}
@@ -208,43 +276,55 @@ u8 Key_Scan(void)
 	  switch(GPIOC->IDR&0x001f)
 		{
 			case 0x0001 : 
-				 keyValue=23;
+				 keyValue=0x17;
 	         		
 				 break;
 			case 0x0002 : 
-				 keyValue=24;
+				 keyValue=0x18;
 	         		
 				 break;
 			case 0x0004 : 
-				 keyValue=25;
+				 keyValue=0x19;
 	         		
 				 break;
 			case 0x0008 : 
-				 keyValue=26;
+				 keyValue=0x1a;
 	         		
 				 break; 
 		  case 0x0010 : 
-				 keyValue=27;
+				 keyValue=0x1b;
 	         		
 				 break;
 		}	
-	
+
 	return keyValue;
 
 }
+
+
+
+
 /*
-typedef struct
+typedef struct{
+	unsigned char CurkeyIndex;
+	unsigned char LeftsurState;
+	unsigned char LeftState;	
+	unsigned char RightState;	
+	unsigned char RightsurState;
+	void (*CurOperate)();
+}MainKeyTable;
+*/
+
+
+
+
+
+/*
+KbdTabStruct const KeyTab[SIZE_OF_KEYBD_MENU] =
 {
-　uchar 　KeyStateIndex ; 　　/ / 当前状态索引号
-　uchar 　KeyDnState ; 　　/ / 按下“向下”键时转向的状态索引号
-　uchar 　KeyUpState ; 　　/ / 按下“向上”键时转向的状态索引号
-　uchar 　KeyCrState ; 　　/ / 按下“回车”键时转向的状态索引号
-　uchar 　KeyBackState ; 　　/ / 按下“退回”键时转向的状态索引号
-　void 　 (*CurrentOperate)( ) ; 　　/ / 当前状态应该执行的功能操作
-} 　KbdTabSt ruct ;
-# define SIZE - OF KEYBD - MENU 55 　　/ / 菜单总长度
-KbdTabSt ruct code KeyTab[ SIZE - OF - KEYBD - MENU ] =
-{
+
+//index,enter,esc,left,right
+
 　{0 ,0 ,0 ,1 ,0 , MainJob1 } ,
 　{1 ,7 ,2 ,8 ,0 , Dsp Point} , 　　/ / 第一层
 　{2 ,1 ,3 ,8 ,0 , DspCurve}, 　　/ / 第一层
@@ -259,8 +339,7 @@ KbdTabSt ruct code KeyTab[ SIZE - OF - KEYBD - MENU ] =
 　{52 ,53 ,53 ,0 ,1 ,  OkSetCloseDown1} ,
 　{53 ,52 ,52 ,0 ,1 , OkSetCloseDown2} ,
 　{54 ,0 ,0 ,0 ,0 , Disable} ,
-  …
-  …
+
 } ;
 　void Get Keylnput (void)
 {
@@ -296,8 +375,8 @@ KbdTabSt ruct code KeyTab[ SIZE - OF - KEYBD - MENU ] =
 　　( * KeyFuncPt r) () ; 　　/ / 执行当前按键的操作
 }
 
-
 */
+
 
 
 
