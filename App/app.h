@@ -6,6 +6,19 @@
 #include "os_type.h"
 #include "ugui.h"
 #include "malloc.h"
+
+typedef struct s_RemotePara{
+	u16 ReportedBedStatus;
+
+}RemotePara;
+
+
+typedef enum e_ErrorCode{
+    ERR_CODE_NONE                = 0,
+    //Warnning
+    //Emergency
+}eErrorCode;
+
 typedef enum e_KeyType
 {  
 	Key_SpeedAdj = 0,//µ÷ËÙ
@@ -88,6 +101,14 @@ void UGUI_ShowSubWindow(void);
 void UGUI_WindowStateHandler(eKeyType event);
 
 u8 appCOM_SendCmdCode(u8 _CmdCode);
+
+u8 appMon_Init(void);
+
+u32 appMon_SetBeeper(u8 ucTimes, u8 ucInterval);
+
+
+
+u32 appMon_SetBackLightPwm(u8 ucTimes, u8 ucInterval);
 
 
 

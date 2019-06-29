@@ -18,7 +18,10 @@ void BSP_Init(void)
   这样STemWin的库只能用在ST的芯片上面，别的芯片是无法使用的。 */
 	//RCC_AHBPeriphClockCmd(RCC_AHBPeriph_CRC, ENABLE);
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 	//设置NVIC中断分组2:2位抢占优先级，2位响应优先级
-	 
+
+	//通用GPIO 初始化
+	bsp_InOutInit();
+	
 	/* LED 端口初始化 */ 
   //LED_GPIO_Config();
 	LED_Init();// 这里有个Bug，不初始化LED 屏幕不亮，应该是IO配置移动在LCD初始化里边
@@ -73,6 +76,41 @@ void SysTick_init(void)
 		/* Capture error */ 
 		while (1);
 	}
+}
+
+uint32_t bsp_GetRCCofGPIO(GPIO_TypeDef* GPIOx)
+{
+	uint32_t rcc;
+
+	if (GPIOx == GPIOA)
+	{
+		rcc = RCC_APB2Periph_GPIOA;
+	}
+	else if (GPIOx == GPIOB)
+	{
+		rcc = RCC_APB2Periph_GPIOB;
+	}
+	else if (GPIOx == GPIOC)
+	{
+		rcc = RCC_APB2Periph_GPIOC;
+	}
+	else if (GPIOx == GPIOD)
+	{
+		rcc = RCC_APB2Periph_GPIOD;
+	}
+	else if (GPIOx == GPIOE)
+	{
+		rcc = RCC_APB2Periph_GPIOE;
+	}
+	else if (GPIOx == GPIOF)
+	{
+		rcc = RCC_APB2Periph_GPIOF;
+	}
+	else if (GPIOx == GPIOG)
+	{
+		rcc = RCC_APB2Periph_GPIOG;
+	}
+	return rcc;
 }
 
 

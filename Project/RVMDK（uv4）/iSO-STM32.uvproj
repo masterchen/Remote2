@@ -631,6 +631,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\App\app_communication.c</FilePath>
             </File>
+            <File>
+              <FileName>app_monitor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\App\app_monitor.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -690,6 +695,11 @@
               <FileName>malloc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Bsp\src\malloc.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Bsp\src\bsp_gpio.c</FilePath>
             </File>
           </Files>
         </Group>

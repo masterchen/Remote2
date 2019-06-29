@@ -1,6 +1,11 @@
 #ifndef  __INCLUDES_H__
 #define  __INCLUDES_H__
 
+typedef enum
+{ 
+  _OFF_ = 0,
+  _ON_
+}eOnOff;
 
 
 #include "stm32f10x.h"
@@ -13,7 +18,9 @@
 #include "bsp_key.h"
 #include "bsp_spi.h"
 #include "bsp_flash.h"
+#include "bsp_gpio.h"
 #include "os.h"
+
 
 typedef  void	*(*BSPFuncHook)(void *Arg);
 
@@ -38,6 +45,8 @@ void SysTick_init(void);
 extern void BSP_Init(void);
 extern u8 KEY_Scan(void); //°´¼üÉ¨Ãèº¯Êý			
 
+
+uint32_t bsp_GetRCCofGPIO(GPIO_TypeDef* GPIOx);
 
 
 

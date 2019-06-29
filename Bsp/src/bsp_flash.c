@@ -8,6 +8,13 @@
 //ÈÝÁ¿Îª2M×Ö½Ú,¹²ÓÐ32¸öBlock,512¸öSector 
 
 //³õÊ¼»¯SPI FLASHµÄIO¿Ú
+
+/*
+W25Q128 ½« 16M µÄÈÝÁ¿·ÖÎª 256 ¸ö¿é£¨Block£©£¬Ã¿¸ö¿é´óÐ¡Îª 64K ×Ö½Ú£¬Ã¿¸ö¿éÓÖ·ÖÎª 16¸öÉÈÇø£¨Sector£©£
+Ã¿¸öÉÈÇø 4K ¸ö×Ö½Ú¡£ W25Q128 µÄ×îÉÙ²Á³ýµ¥Î»ÎªÒ»¸öÉÈÇø£¬Ò²¾ÍÊÇÃ¿´Î±ØÐë²Á³ý 4K ¸ö×Ö½Ú¡£
+²Ù×÷ÐèÒª¸ø W25Q128 ¿ª±ÙÒ»¸öÖÁÉÙ 4K µÄ»º´æÇø£¬¶Ô SRAM ÒªÇó±È½Ï¸ß£¬ÒªÇóÐ¾Æ¬±ØÐëÓÐ 4K ÒÔÉÏ SRAM ²ÅÄÜºÜºÃµÄ²Ù×÷¡£
+*/
+
 void SPI_Flash_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;

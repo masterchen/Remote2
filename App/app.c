@@ -103,7 +103,9 @@ void Task_Start(void *p_arg)
 {
 	OS_ERR err;
   (void)p_arg;	
-	
+
+  appMon_Init();
+
   OSQCreate((OS_Q*        )&KEY_Msg,
 						(CPU_CHAR*    )"KEY Msg",
 						(OS_MSG_QTY   )KEYMSG_Q_NUM,
@@ -166,7 +168,7 @@ void Task_Start(void *p_arg)
 							 
                
   //任务删除自己	
-	OSTaskDel(&StartUp_TCB,&err);							 
+	OSTaskDel(&StartUp_TCB,&err);	
 }
 
 
