@@ -68,18 +68,20 @@ typedef struct s_KeyMap2{
 
 /*******************设置任务优先级*******************/
 #define STARTUP_TASK_PRIO       3
-#define	TASK_LED1_PRIO			    4
-#define	TASK_KEY_PRIO			    5
-
-#define	TASK_GUI_PRIO				    7
+#define	TASK_LED1_PRIO			4
+#define	TASK_KEY_PRIO			5
+#define	TASK_GUI_PRIO			7
 
 /************设置栈大小（单位为 OS_STK ）************/
 #define STARTUP_TASK_STK_SIZE   80 
-#define	TASK_LED1_STK_SIZE		  80  
-#define	TASK_GUI_STK_SIZE       500
-#define TASK_KEY_STK_SIZE 80
+#define	TASK_LED1_STK_SIZE		80  
+#define	TASK_GUI_STK_SIZE       700
+#define TASK_KEY_STK_SIZE 		80
 
 /**************** 用户任务声明 *******************/
+void ConvertUncharToChar(char *str,unsigned char* UnChar,int uclen);
+unsigned char* ToString(unsigned char array[],int array_size);
+void tmr1_callback(OS_TMR * ptmr, void * p_arg);
 void Task_Start(void *p_arg);
 void Task_LED1(void *p_arg);
 void Task_LED2(void *p_arg);
@@ -89,14 +91,17 @@ void Task_GUI(void *p_arg);
 void Task_GUI_Touch(void *p_arg);
 
 /**************** 界面控制函数定义******************/
+void fastmem_select_exe_window(void);
+void fastmem_select_mem_window(void);
 
 void UGUI_WindowInit(void);
 void UGUI_ShowSpash(void);
+void UGUI_ShowSpasha(void);
+
 
 void UGUI_ShowMainWindow(void);
 
 void UGUI_ShowSubWindow(void);
-
 
 void UGUI_WindowStateHandler(eKeyType event);
 

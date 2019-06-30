@@ -1,6 +1,41 @@
 #include "app.h"
 #include "image.h"
 #include "delay.h"
+#include "string.h"
+
+#define led1on GPIO_ReadOutputDataBit(GPIOE,GPIO_Pin_2)
+#define led2on GPIO_ReadOutputDataBit(GPIOE,GPIO_Pin_3)
+
+extern unsigned char ReadBackData[25];
+extern unsigned char ReadBack;
+extern unsigned char buffera[4];
+
+typedef struct{
+	unsigned char KeyStateIndex;
+	unsigned char KeyEnterState;
+	unsigned char KeyBackState;
+	unsigned char KeyLeftState;
+	unsigned char KeyRightState;
+	unsigned char KeySetState;
+	void (*CurrentOperate)();
+}KbdTabStruct;
+
+KbdTabStruct const MainKeyTab[55]={
+
+//index,leftsur,left,right,rightsur,mix
+{0,1,2,3,4,5,(*fastmem_select_mem_window)},
+{1,2,3,4,5,0,(*fastmem_select_exe_window)},
+{2,3,4,5,0,1,(*UGUI_ShowSubWindow)},
+{3,4,5,0,1,2,(*UGUI_ShowMainWindow)},
+{4,5,0,1,2,3,(*UGUI_ShowSpasha)},
+{5,0,1,2,3,4,(*UGUI_ShowSpash)},
+};
+
+//unsigned char buffer[8]={1,2,3};
+//"1234"
+
+void (*KeyFuncPtr)();
+
 
 extern UG_RESULT _HW_DrawLine( UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c );
 extern UG_RESULT _HW_FillFrame( UG_S16 x1, UG_S16 y1, UG_S16 x2, UG_S16 y2, UG_COLOR c );
@@ -26,12 +61,30 @@ UG_TEXTBOX textbox2_1;
 UG_TEXTBOX textbox2_2;
 UG_TEXTBOX textbox2_3;
 UG_IMAGE image2_1;
+UG_IMAGE image2_2;
+
 
 /* Window 3 */
 UG_WINDOW window_3;
 UG_OBJECT obj_buff_wnd_3[MAX_OBJECTS];
 UG_BUTTON button3_1;
 UG_TEXTBOX textbox3_1;
+
+/*fastmem_select_exe*/
+
+UG_WINDOW fastmem_select_exe;
+UG_OBJECT obj_buff_fse_1[MAX_OBJECTS];
+UG_BUTTON button_fse_1;
+UG_BUTTON button_fse_2;
+
+/*fastmem_select_mem*/
+
+UG_WINDOW fastmem_select_mem;
+UG_OBJECT obj_buff_fsm_1[MAX_OBJECTS];
+UG_BUTTON button_fsm_1;
+UG_BUTTON button_fsm_2;
+
+
 
 /* FSM */
 #define STATE_MAIN_MENU                0
@@ -63,6 +116,37 @@ typedef struct S_WindowStateInfo{
 	WindowPageInfo prePage;
 	WindowPageInfo nextPage;
 }WindowStateInfo;
+
+/*
+WindowPageInfo window1_1={"start_window",&window1,Key_Func2};
+	
+WindowStateInfo fastmem_select_exe={fastmem_select_exe,main_window,fastmem_confirm_exe};
+WindowStateInfo fastmem_select_mem={fastmem_select_mem,fastmem_select_exe,fastmem_confirm_mem}
+WindowStateInfo fastmem_confirm_exe={fastmem_confirm_exe,fastmem_select_exe,fastmem_exe,};
+WindowStateInfo fastmem_confirm_mem={fastmem_confirm_mem,fastmem_select_mem,fastmem_mem,};
+WindowStateInfo fastmem_exe={fastmem_exe,fastmem_confirm_exe,main_window};
+WindowStateInfo fastmem_mem={fastmem_mem,fastmem_confirm_mem,main_window};
+*/
+
+
+
+
+
+
+void fastmem_select_mem_callback( UG_MESSAGE* msg )
+{
+  
+}
+void fastmem_select_exe_callback( UG_MESSAGE* msg )
+{
+ 
+}
+
+
+
+
+
+
 
 
 /* Callback function for the main menu */
@@ -304,36 +388,72 @@ void UGUI_WindowDemo(void)
 
 void UGUI_ShowSpash(void)
 {
+
 	UG_Update();	//Windows??
 
-
 	UG_WindowCreate( &window_2, obj_buff_wnd_2, MAX_OBJECTS, window_2_callback );
-	//UG_WindowSetTitleText( &window_2, "Info" );
 	UG_WindowSetTitleTextFont( &window_2, &FONT_12X20 );
 	UG_WindowSetTitleColor( &window_2, C_WHITE );
 	//UG_WindowResize( &window_2, 20, 40, 219, 279 );
-	
-	put_chinese_char(250,150,0,C_BLACK);
-	put_chinese_char(210,75,1,C_BLACK);
-	
 	put_chinese_char16(220,5,0,C_BLACK);
 	put_chinese_char16(250,5,1,C_BLACK);
 	put_chinese_char16(280,5,2,C_BLACK);
 
+	//put_chinese_char(250,150,0,C_BLACK);
+	//put_chinese_char(210,75,1,C_BLACK);//威
 	
-	/* Create Textbox 1 */
-	UG_TextboxCreate( &window_2, &textbox2_1, TXB_ID_0, 10, 50, UG_WindowGetInnerWidth( &window_2 )-10, 100 );
+	/* Create Textbox 1*/
+	UG_TextboxCreate( &window_2, &textbox2_1, TXB_ID_0, 200, 50, UG_WindowGetInnerWidth( &window_2 )-10, 100 );
 	UG_TextboxSetFont( &window_2, TXB_ID_0, &FONT_22X36 );
-	UG_TextboxSetText( &window_2, TXB_ID_0, "WEGO" );
-	UG_TextboxSetAlignment( &window_2, TXB_ID_0, ALIGN_TOP_CENTER );
+	//UG_TextboxSetText( &window_2, TXB_ID_0, "WEGO" );
+	UG_TextboxSetText( &window_2, TXB_ID_0, buffera);
+	//UG_TextboxSetAlignment( &window_2, TXB_ID_0, ALIGN_TOP_CENTER );
 	UG_TextboxSetForeColor( &window_2, TXB_ID_0, C_BLACK );
+	//_UG_UpdateObjects( &window_2 );
 
-	_HW_DrawLine(2,210,318,210,C_BLACK );
+	//_HW_DrawLine(2,210,318,210,C_BLACK );
+
+	//UG_ImageCreate( &window_2, &image2_2, IMG_ID_1, 40, 40, 144, 144);
+	//UG_ImageSetBMP( &window_2, IMG_ID_1, &logo );		
 
 	UG_WindowShow( &window_2 );	
 
 
 
+
+}
+
+/*
+void UGUI_ShowImage(UG_WINDOW* window, UG_BMP* bmp )
+{
+	UG_ImageCreate( &window_2, &image2_2, IMG_ID_1, 40, 40, 144, 144);
+	UG_ImageSetBMP( &window_2, IMG_ID_1, &bmp );		
+	UG_Update();	//Windows刷新
+
+}
+*/
+
+void UGUI_ShowSpasha(void)
+{
+	UG_Update();	//Windows??
+	
+	UG_WindowCreate( &window_2, obj_buff_wnd_2, MAX_OBJECTS, window_2_callback );
+	UG_WindowSetTitleTextFont( &window_2, &FONT_12X20 );
+	UG_WindowSetTitleColor( &window_2, C_WHITE );
+	
+	UG_TextboxCreate( &window_2, &textbox2_2, TXB_ID_1, 200, 50, UG_WindowGetInnerWidth( &window_2 )-10, 100 );
+	UG_TextboxSetFont( &window_2, TXB_ID_1, &FONT_22X36 );
+	UG_TextboxSetText( &window_2, TXB_ID_1, &buffera[2]);
+	UG_TextboxSetForeColor( &window_2, TXB_ID_1, C_BLACK );
+
+	//_UG_UpdateObjects( &window_2 );
+
+    //UG_ImageCreate( &window_2, &image2_1, IMG_ID_0, 40, 40, 144, 144 );
+	//UG_ImageSetBMP( &window_2, IMG_ID_0, &logo );		
+
+	//_UG_ImageUpdate(&window_2, obj_buff_wnd_2);
+
+	UG_WindowShow( &window_2 );	
 
 }
 
@@ -343,6 +463,7 @@ void UGUI_ShowSpash(void)
 
 void UGUI_ShowMainWindow(void)
 {
+	UG_Update();	//Windows??
 
 	UG_WindowCreate( &window_3, obj_buff_wnd_3, MAX_OBJECTS, window_3_callback );
 	UG_WindowSetTitleText( &window_3, "Benchmark Result" );
@@ -360,12 +481,13 @@ void UGUI_ShowMainWindow(void)
 
 
 	UG_WindowShow( &window_3 );							
-	UG_Update();	//Windows刷新
 
 }
 
 void UGUI_ShowSubWindow(void)
 {
+	UG_Update();	//Windows??
+
 	UG_WindowCreate( &window_2, obj_buff_wnd_2, MAX_OBJECTS, window_2_callback );
 	UG_WindowSetTitleText( &window_2, "Info" );
 	UG_WindowSetTitleTextFont( &window_2, &FONT_12X20 );
@@ -379,38 +501,255 @@ void UGUI_ShowSubWindow(void)
 	UG_TextboxSetFont( &window_2, TXB_ID_0, &FONT_16X26 );
 	UG_TextboxSetText( &window_2, TXB_ID_0, "GUI v0.3" );
 	UG_TextboxSetAlignment( &window_2, TXB_ID_0, ALIGN_TOP_CENTER );
-	/* Create Textbox 2 */
+	/* Create Textbox 2
 	UG_TextboxCreate( &window_2, &textbox2_2, TXB_ID_1, 10, 125, UG_WindowGetInnerWidth( &window_2 )-10, 135 );
 	UG_TextboxSetFont( &window_2, TXB_ID_1, &FONT_6X8 );
 	UG_TextboxSetText( &window_2, TXB_ID_1, "www.embeddedlightning.com" );
 	UG_TextboxSetAlignment( &window_2, TXB_ID_1, ALIGN_BOTTOM_CENTER );
 	UG_TextboxSetForeColor( &window_2, TXB_ID_1, C_BLUE );
 	UG_TextboxSetHSpace( &window_2, TXB_ID_1, 1 );
-
+	 */
+	/* Create Image 1 */
+    //UG_ImageCreate( &window_2, &image2_1, IMG_ID_0, 40, 40, 144, 144 );
+	//UG_ImageSetBMP( &window_2, IMG_ID_0, &logo );		
 	UG_WindowShow( &window_2 ); 						
-	UG_Update();	//Windows刷新
 
+}
+
+void fastmem_select_exe_window(void)
+{
+	OS_ERR err;
+
+	UG_Update();	//Windows??
+
+	UG_WindowCreate( &fastmem_select_exe, obj_buff_fse_1, MAX_OBJECTS, fastmem_select_exe_callback );
+	UG_WindowSetTitleTextFont( &fastmem_select_exe, &FONT_22X36 );
+	UG_WindowSetTitleColor( &fastmem_select_exe, C_WHITE );
+	UG_WindowResize( &fastmem_select_exe, 20, 40, 219, 279 );
+	//_UG_UpdateObjects( &fastmem_select_exe );
+
+	put_chinese_char32(220,5,7,C_RED);
+	put_chinese_char32(280,5,8,C_RED);
+	put_chinese_char32(120,5,11,C_RED);
+
+	put_chinese_char32(80,200,9,C_RED);
+	put_chinese_char32(120,200,5,C_RED);
+	
+	put_chinese_char32(160,200,6,C_RED);
+	put_chinese_char32(200,200,10,C_RED);	
+	
+	UG_ButtonCreate( &fastmem_select_exe, &button_fse_1, BTN_ID_0, 20, 20, 140, 140 );
+
+	UG_ButtonSetBackColor( &fastmem_select_exe, BTN_ID_0, C_WHITE);
+	//_UG_UpdateObjects( &fastmem_select_exe );
+	put_chinese_char80(60,80,0,C_BLACK);
+	
+	OSTimeDly(500,OS_OPT_TIME_DLY,&err);
+	OSTimeDly(500,OS_OPT_TIME_DLY,&err);	
+	
+	UG_ButtonSetBackColor( &fastmem_select_exe, BTN_ID_0, C_BROWN);	
+	//_UG_UpdateObjects( &fastmem_select_exe );
+	put_chinese_char80(60,80,1,C_BLACK);
+/*
+	put_chinese_char16(220,5,0,C_BLACK);
+	put_chinese_char16(250,5,1,C_BLACK);
+	put_chinese_char16(280,5,2,C_BLACK);
+
+	put_chinese_char32(80,70,1,C_BLACK);
+	put_chinese_char32(120,70,2,C_BLACK);
+
+	put_chinese_char32(80,150,3,C_BLACK);
+	put_chinese_char32(120,150,4,C_BLACK);
+
+	_HW_DrawLine(2,210,318,210,C_BLACK );
+*/
+	UG_WindowShow( &fastmem_select_exe );	
+
+}
+
+void fastmem_select_mem_window(void)
+{
+	UG_Update();	//Windows??
+
+	UG_WindowCreate( &fastmem_select_mem, obj_buff_fsm_1, MAX_OBJECTS, fastmem_select_mem_callback );
+	UG_WindowSetTitleTextFont( &fastmem_select_mem, &FONT_12X20 );
+	UG_WindowSetTitleColor( &fastmem_select_mem, C_WHITE );
+
+
+	UG_ButtonCreate( &fastmem_select_mem, &button_fsm_1, BTN_ID_0, 40, 40, 200, 80 );
+	UG_ButtonSetFont( &fastmem_select_mem, BTN_ID_0, &FONT_22X36 );
+
+	UG_ButtonCreate( &fastmem_select_mem, &button_fsm_2, BTN_ID_1, 40, 120, 200, 160 );
+	UG_ButtonSetFont( &fastmem_select_mem, BTN_ID_1, &FONT_22X36 );
+	
+	//_UG_UpdateObjects( &fastmem_select_mem );
+
+	put_chinese_char16(220,5,0,C_RED);
+	put_chinese_char16(250,5,1,C_RED);
+	put_chinese_char16(280,5,2,C_RED);
+
+	put_chinese_char32(80,70,3,C_RED);
+	put_chinese_char32(120,70,4,C_RED);
+
+	put_chinese_char32(80,150,1,C_RED);
+	put_chinese_char32(120,150,2,C_RED);
+
+	//_HW_DrawLine(2,210,318,210,C_RED );
+	
+	//_UG_UpdateObjects( &fastmem_select_mem );
+	UG_WindowShow( &fastmem_select_mem );	
+
+}
+void mainwindow()
+{
+
+
+}
+void enterwindow()
+{
+
+	
+}
+void escwindow()
+{
+
+	
+}
+void upwindow()
+{
+
+	
+}
+void dowwindow()
+{
+
+	
+}
+void setwindow()
+{
+
+	
 }
 
 
 void UGUI_WindowStateHandler(eKeyType event)
 {
+
+  static int Key_Fun = 0;
+
+	switch(event){	
+		case Key_Func1: 	  
+			Key_Fun = MainKeyTab[Key_Fun].KeyEnterState;
+		break;
+		case Key_Func2: 		
+			Key_Fun = MainKeyTab[Key_Fun].KeyBackState;
+		break;
+		case Key_PageUp: 	 
+			Key_Fun = MainKeyTab[Key_Fun].KeyLeftState;
+		break;
+		case Key_Memo:		 
+			Key_Fun = MainKeyTab[Key_Fun].KeyRightState;
+		break;
+		case 0:
+		return;
+		break;
+	}
+	KeyFuncPtr = MainKeyTab[Key_Fun].CurrentOperate ;
+	(*KeyFuncPtr)();
+}
+
+/*
+void UGUI_WindowStateHandler(eKeyType event)
+{
+	OS_ERR err;
 	switch(event)
 	{
+<<<<<<< .mine
+		case Key_Func1: 
+			SPI_Flash_Read(logo_bmp,0xC0000000,21632);	
+			UGUI_ShowSpash();		
+			OSTimeDly(1000,OS_OPT_TIME_DLY,&err);
+			SPI_Flash_Read(logo_bmp,0xC0010000,21632);	
+			UGUI_ShowSpasha();				
+		
+||||||| .r14
+		case Key_Func1:
+			UGUI_ShowSpash();
+=======
 		case Key_Func1:
 			//UGUI_ShowSpash();
 			UGUI_WindowDemo();
+>>>>>>> .r16
 			printf("get key\r\n");
 			break;
-		case Key_Func2:	
+		case Key_Func2:					
 			UGUI_ShowMainWindow();
 			printf( "\r\n Key func2\r\n");
 			break;
 		case Key_PageUp: 
+			SPI_Flash_Read(logo_bmp,0xC0010000,21632);	
 			UGUI_ShowSubWindow();
 			break;
-		default:
+//		case Key_SpeedAdj:
+		case Key_LegCntSwitch:	//切换按钮
+
+			if(led1on && led2on)
+			{
+				
+				GPIO_SetBits(GPIOE,GPIO_Pin_2);
+				GPIO_ResetBits(GPIOE,GPIO_Pin_3);
+			}else if(led1on && (!led2on))
+			{
+				
+				GPIO_ResetBits(GPIOE,GPIO_Pin_2);
+				GPIO_SetBits(GPIOE,GPIO_Pin_3);
+			}else if((!led1on) && led2on)
+			{
+				
+				GPIO_SetBits(GPIOE,GPIO_Pin_2);
+				GPIO_SetBits(GPIOE,GPIO_Pin_3);
+			}else
+			{
+				
+				GPIO_SetBits(GPIOE,GPIO_Pin_2);
+				GPIO_ResetBits(GPIOE,GPIO_Pin_3);
+			}		
+			break;
+		case Key_Memo://记忆按钮
+			fastmem_select_exe_window();
+			break;
+		case Key_BackUp: //背部上折
+		    fastmem_select_mem_window();
+			break;
+/*	
+
+		
+		case Key_BackDown,//背部下折
+		case Key_WaistUp,//腰部上折
+		case Key_WaistDown,//腰部下折
+		case Key_LegUp,//腿板上升
+		case Key_LegDown,
+		case Key_Trendelenburg,//头低脚高 前倾
+		case Key_AntiTrendelenburg,//后倾
+		case key_Up,//升高
+		case Key_Down,//降低
+		case Key_LeftLean,//左倾
+		case Key_RightLean,//右倾
+		case Key_HeadForward,//头部平移
+		case Key_FootForward,//脚部平移
+		case Key_ReverseFunc,//正反向按钮
+		case Key_UnLock,//解锁
+		case Key_Lock,//锁定
+		case Key_Start,//启动
+		case Key_Stop,//停止
+		case Key_Reset,//零位
+		case key_ReadData,
+		case Key_Max	
+		
+	default:
 			break;
 	}
 	
 }
+
+*/

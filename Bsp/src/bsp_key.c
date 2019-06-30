@@ -23,59 +23,7 @@
 GPIO_InitTypeDef GPIO_InitStructure;
 
 
-typedef struct{
-	unsigned char KeyStateIndex; 　　// 当前状态索引号
-	unsigned char KeyEnterState; 　　//按下“回车”键时转向的状态索引号
-	unsigned char KeyBackState; 　　// 按下“退回”键时转向的状态索引号
-	unsigned char KeyLeftState; 　　//按下“向下”键时转向的状态索引号
-	unsigned char KeyRightState; 　　// 按下“向上”键时转向的状态索引号
-	unsigned char KeySetState;     //按下设置键转向的状态索引号
-	void (*CurrentOperate)(); 　　//当前状态应该执行的功能操作
-}KbdTabStruct;
 
-#define SIZE_OF_KEYBD_MENU     55 　　/ / 菜单总长度 
-
-void (*KeyFuncPtr)() ;
-
-KbdTabStruct const MainKeyTab[SIZE_OF_KEYBD_MENU]={
-
-//index,leftsur,left,right,rightsur,mix
-{0,1,2,3,4,5,(*fastmem_select_mem_window)},
-{1,2,3,4,5,0,(*fastmem_select_exe_window)},
-{2,3,4,5,0,1,(*UGUI_ShowSubWindow)},
-{3,4,5,0,1,2,(*UGUI_ShowMainWindow)},
-{4,5,0,1,2,3,(*UGUI_ShowSpasha)}，
-{5,0,1,2,3,4,(*UGUI_ShowSpash)},
-};
-
-void GetKeylnput (int key)
-{
-
-  static int Key_Fun = 0;
-
-　switch(key){
-	
-　 case Key_Func1: 	   //回车键,找出新的菜单状态编号
-		Key_Fun = MainKeyTab[Key_Fun].KeyEnterState ;
-　　　	  break;
-　 case Key_Func2: 		//向下键,找出新的菜单状态编号
-		Key_Fun = MainKeyTab[Key_Fun].KeyBackState ;
-　　		break;
-   case Key_PageUp: 	  //向上键,找出新的菜单状态编号
-		Key_Fun = MainKeyTab[Key_Fun].KeyLeftState ;
-　　　	  break;
-　 case Key_PageDown:		  //回退键,找出新的菜单状态编号
-		Key_Fun = MainKeyTab[Key_Fun].KeyRightState ;
-　　　	  break;
-　 case 0;
-　　　 return; 　　// 错误的处理
-　　　 break;
-　　　}
-
-　 KeyFuncPtr = MainKeyTab[Key_Fun].CurrentOperate ;
-
-　(*KeyFuncPtr)() ; 　　// 执行当前按键的操作
-}
 
 
 
