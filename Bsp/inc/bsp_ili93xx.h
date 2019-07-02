@@ -169,10 +169,12 @@ void LCD_SetPoint(uint16_t Xpos,uint16_t Ypos,uint16_t point);
 void LCD_DrawRectangle(u16 x1, u16 y1, u16 x2, u16 y2);		   				//画矩形
 void LCD_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 color);		   				//填充单色
 void LCD_Color_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 color);				//填充指定颜色
-void LCD_ShowChar(u16 x,u16 y,u8 num,u8 size,u8 mode);						//显示一个字符
+void LCD_ShowChar(u16 x,u16 y,u16 fc, u16 bc, u8 num,u8 size,u8 mode);					//显示一个字符
 void LCD_ShowNum(u16 x,u16 y,u32 num,u8 len,u8 size);  						//显示一个数字
 void LCD_ShowxNum(u16 x,u16 y,u32 num,u8 len,u8 size,u8 mode);				//显示 数字
-void LCD_ShowString(u16 x,u16 y,u16 width,u16 height,u8 size,u8 *p);		//显示一个字符串,12/16字体
+//void LCD_ShowString(u16 x,u16 y,u16 width,u16 height,u8 size,u8 *p);		//显示一个字符串,12/16字体
+void LCD_ShowString(u16 x,u16 y,u8 size,u8 *p,u8 mode);
+
 
 void LCD_WriteReg(u16 LCD_Reg, u16 LCD_RegValue);
 u16 LCD_ReadReg(u16 LCD_Reg);
@@ -188,7 +190,10 @@ void Gui_StrCenter(u16 x, u16 y, u16 fc, u16 bc, u8 *str,u8 size,u8 mode);
 void Show_Str(u16 x,u16 y,u16 fc,u16 bc,u8 *str,u8 size,u8 mode);
 void Gui_Drawbmp16WH(u16 x,u16 y,u16 width,u16 hight,const u8 *p);
 void LCD_DrawPoint_16Bit(u16 color);
-
+void GUI_DrawFont16(u16 x, u16 y, u16 fc, u16 bc, u8 *s,u8 mode); 
+void GUI_DrawFont24(u16 x, u16 y, u16 fc, u16 bc, u8 *s,u8 mode);
+void GUI_DrawFont32(u16 x, u16 y, u16 fc, u16 bc, u8 *s,u8 mode);
+ 
 
 void LCD_Init(void);
 void LCD_Reginit(void);

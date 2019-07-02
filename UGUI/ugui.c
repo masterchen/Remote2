@@ -5576,7 +5576,6 @@ void _UG_PutText(UG_TEXT* txt)
       if ( *c == '\n' ) rc++;
       c++;
    }
-
    yp = 0;
    if ( align & (ALIGN_V_CENTER | ALIGN_V_BOTTOM) )
    {
@@ -5587,82 +5586,154 @@ void _UG_PutText(UG_TEXT* txt)
    }
    if ( align & ALIGN_V_CENTER ) yp >>= 1;
    yp += ys;
-
-   while( 1 )
+   if(0)
    {
-      sl=0;
-      c=str;
-      while( (*c != 0) && (*c != '\n') )
-      {
-         c++;
-         sl++;
-      }
-
-      xp = xe - xs + 1;
-      xp -= char_width*sl;
-      xp -= char_h_space*(sl-1);
-      if ( xp < 0 ) return;
-
-      if ( align & ALIGN_H_LEFT ) xp = 0;
-      else if ( align & ALIGN_H_CENTER ) xp >>= 1;
-      xp += xs;
-
-      while( (*str != '\n') )
-      {
-         if ( *str == 0 ) return;
-         /*----------------------------------*/
-         /* Draw one char                    */
-         /*----------------------------------*/
-         bt = (UG_U8)*str;
-         switch ( bt )
-         {
-            case 0xF6: bt = 0x94; break; // ?
-            case 0xD6: bt = 0x99; break; // ?
-            case 0xFC: bt = 0x81; break; // ?
-            case 0xDC: bt = 0x9A; break; // ?
-            case 0xE4: bt = 0x84; break; // ?
-            case 0xC4: bt = 0x8E; break; // ?
-            case 0xB5: bt = 0xE6; break; // ?
-            case 0xB0: bt = 0xF8; break; // ?
-         }
-         yo = yp;
-         bn = char_width;
-         bn >>= 3;
-         if ( char_width % 8 ) bn++;
-         p = txt->font->p;
-         p+= bt * char_height * bn;
-         for( j=0;j<char_height;j++ )
-         {
-            xo = xp;
-            cw=char_width;
-            for( i=0;i<bn;i++ )
-            {
-               b = *p++;
-               for( k=0;(k<8) && cw;k++ )
-               {
-                  if( b & 0x01 )
-                  {
-                     gui->pset(xo,yo,txt->fc);
-                  }
-                  else
-                  {
-                     gui->pset(xo,yo,txt->bc);
-                  }
-                  b >>= 1;
-                  xo++;
-                  cw--;
-               }
-            }
-            yo++;
-         }
-         /*----------------------------------*/
-         xp += char_width + char_h_space;
-         str++;
-      }
-      str++;
-      yp += char_height + char_v_space;
+   	Show_Str(xs,ys,txt->fc,txt->bc,str,txt->font->char_height,1);
    }
+   else
+   	{
+   	   while( 1 )
+	   {
+	      sl=0;
+	      c=str;
+	      while( (*c != 0) && (*c != '\n') )
+	      {
+	         c++;
+	         sl++;
+	      }
+
+	      xp = xe - xs + 1;
+	      xp -= char_width*sl;
+	      xp -= char_h_space*(sl-1);
+	      if ( xp < 0 ) return;
+
+	      if ( align & ALIGN_H_LEFT ) xp = 0;
+	      else if ( align & ALIGN_H_CENTER ) xp >>= 1;
+	      xp += xs;
+
+	      while( (*str != '\n') )
+	      {
+	         if ( *str == 0 ) return;
+	         /*----------------------------------*/
+	         /* Draw one char                    */
+	         /*----------------------------------*/
+	         bt = (UG_U8)*str;
+	         switch ( bt )
+	         {
+	            case 0xF6: bt = 0x94; break; // ?
+	            case 0xD6: bt = 0x99; break; // ?
+	            case 0xFC: bt = 0x81; break; // ?
+	            case 0xDC: bt = 0x9A; break; // ?
+	            case 0xE4: bt = 0x84; break; // ?
+	            case 0xC4: bt = 0x8E; break; // ?
+	            case 0xB5: bt = 0xE6; break; // ?
+	            case 0xB0: bt = 0xF8; break; // ?
+	         }
+	         yo = yp;
+	         bn = char_width;
+	         bn >>= 3;
+	         if ( char_width % 8 ) bn++;
+	         p = txt->font->p;
+	         p+= bt * char_height * bn;
+	         for( j=0;j<char_height;j++ )
+	         {
+	            xo = xp;
+	            cw=char_width;
+	            for( i=0;i<bn;i++ )
+	            {
+	               b = *p++;
+	               for( k=0;(k<8) && cw;k++ )
+	               {
+	                  if( b & 0x01 )
+	                  {
+	                     gui->pset(xo,yo,txt->fc);
+	                  }
+	                  else
+	                  {
+	                     gui->pset(xo,yo,txt->bc);
+	                  }
+	                  b >>= 1;
+	                  xo++;
+	                  cw--;
+	               }
+	            }
+	            yo++;
+	         }
+	         /*----------------------------------*/
+	         xp += char_width + char_h_space;
+	         str++;
+	      }
+	      str++;
+	      yp += char_height + char_v_space;
+	   }
+   	}
 }
+
+//******************************************************************
+//函数名：  DrawTestPage
+//日期：    2013-02-22
+//功能：    绘制测试界面
+//输入参数：str :字符串指针
+//返回值：  无
+//修改记录：
+//******************************************************************
+void DrawTestPage(u8 *str)
+{
+//绘制固定栏up
+LCD_Fill(0,0,lcddev.width,20,BLUE);
+//绘制固定栏down
+LCD_Fill(0,lcddev.height-20,lcddev.width,lcddev.height,BLUE);
+POINT_COLOR=WHITE;
+Gui_StrCenter(0,2,WHITE,BLUE,str,16,1);//居中显示
+Gui_StrCenter(0,lcddev.height-18,WHITE,BLUE,"威高版权所有 ",16,1);//居中显示
+//绘制测试区域
+LCD_Fill(0,20,lcddev.width,lcddev.height-20,BLACK);
+}
+
+
+//******************************************************************
+//函数名：  English_Font_test
+//日期：    2013-02-22
+//功能：    英文显示测试 
+//输入参数：无
+//返回值：  无
+//修改记录：
+//******************************************************************
+void English_Font_test(void)
+{
+	DrawTestPage("测试4:英文显示测试");
+	POINT_COLOR=RED;
+	BACK_COLOR=BLUE;
+	LCD_ShowString(10,30,12,"6X12:abcdefghijklmnopqrstuvwxyz0123456789",1);
+	LCD_ShowString(10,45,12,"6X12:ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",1);
+	LCD_ShowString(10,60,12,"6X12:~!@#$%^&*()_+{}:<>?/|-+.",0);
+	LCD_ShowString(10,80,16,"8X16:abcdefghijklmnopqrstuvwxyz0123456789",0);
+	LCD_ShowString(10,100,16,"8X16:ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",1);
+	LCD_ShowString(10,120,16,"8X16:~!@#$%^&*()_+{}:<>?/|-+.",0); 
+	delay_ms(1200);
+}
+
+//******************************************************************
+//函数名：  Chinese_Font_test
+//日期：    2013-02-22
+//功能：    中文显示测试
+//输入参数：无
+//返回值：  无
+//修改记录：
+//******************************************************************
+void Chinese_Font_test(void)
+{	
+	DrawTestPage("测试5:中文显示测试");
+	Show_Str(10,30,BLUE,YELLOW,"16X16:中景园电子技术有限公司欢迎您",16,0);
+	Show_Str(10,50,BLUE,YELLOW,"16X16:Welcome中景园",16,1);
+	Show_Str(10,70,BLUE,YELLOW,"24X24:深圳市中文测试",24,1);
+	Show_Str(10,100,BLUE,YELLOW,"32X32:字体测试",32,1);
+	delay_ms(1200);
+}
+
+
+
+
 
 UG_OBJECT* _UG_GetFreeObject( UG_WINDOW* wnd )
 {

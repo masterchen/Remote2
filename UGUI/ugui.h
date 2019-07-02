@@ -29,7 +29,6 @@
 //  Oct 11, 2014  V0.1  First release.
 /* -------------------------------------------------------------------------------- */
 #include "ugui_conf.h"
-//#include "font.h"
 
 #ifndef __UGUI_H
 #define __UGUI_H

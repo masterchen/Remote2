@@ -485,7 +485,7 @@ void UGUI_ShowMainWindow(void)
 }
 
 void UGUI_ShowSubWindow(void)
-{
+{ 
 	UG_Update();	//Windows??
 
 	UG_WindowCreate( &window_2, obj_buff_wnd_2, MAX_OBJECTS, window_2_callback );
@@ -634,11 +634,11 @@ void setwindow()
 
 void UGUI_WindowStateHandler(eKeyType event)
 {
-
-  static int Key_Fun = 0;
+	OS_ERR err;
+	static int Key_Fun = 0;
 
 	switch(event){	
-		case Key_Func1: 	  
+		case Key_Func1: 
 			Key_Fun = MainKeyTab[Key_Fun].KeyEnterState;
 		break;
 		case Key_Func2: 		
