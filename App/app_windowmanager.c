@@ -276,12 +276,12 @@ void UGUI_WindowInit(void)
 
 void UGUI_WindowDemo(void)
 {
-		  /* Create Window 1 */
-	   UG_WindowCreate( &window_1, obj_buff_wnd_1, MAX_OBJECTS, window_1_callback );
-	   //UG_WindowSetTitleText( &window_1, "GUI @ STM32F103" );
-	   UG_WindowSetTitleTextFont( &window_1, &FONT_12X20 );
-	  /* Create some Buttons */
-	  UG_ButtonCreate( &window_1, &button1_1, BTN_ID_0, 10, 10, 110, 60 );
+	 /* Create Window 1 */
+	 UG_WindowCreate( &window_1, obj_buff_wnd_1, MAX_OBJECTS, window_1_callback );
+	 //UG_WindowSetTitleText( &window_1, "GUI @ STM32F103" );
+	 UG_WindowSetTitleTextFont( &window_1, &FONT_12X20 );
+	 /* Create some Buttons */
+	 UG_ButtonCreate( &window_1, &button1_1, BTN_ID_0, 10, 10, 110, 60 );
 	 UG_ButtonCreate( &window_1, &button1_2, BTN_ID_1, 10, 80, 110, 130 );
 	 UG_ButtonCreate( &window_1, &button1_3, BTN_ID_2, 10, 150, 110,200 );
 	 UG_ButtonCreate( &window_1, &button1_4, BTN_ID_3, 120, 10, UG_WindowGetInnerWidth( &window_1 ) - 10 , 60 );
@@ -422,6 +422,37 @@ void UGUI_ShowSpash(void)
 
 
 }
+
+void UGUI_ShowChineseWindow(void)
+{
+
+	/* Create Window 1 */
+	UG_WindowCreate( &window_1, obj_buff_wnd_1, MAX_OBJECTS, window_1_callback );
+	UG_WindowSetTitleTextFont( &window_1, &FONT_12X20 );
+	/* Create some Buttons */
+	UG_ButtonCreate( &window_1, &button1_1, BTN_ID_0, 10, 10, 110, 60 );
+	UG_ButtonCreate( &window_1, &button1_2, BTN_ID_1, 10, 80, 110, 130 );
+	UG_ButtonCreate( &window_1, &button1_3, BTN_ID_2, 10, 150, 110,200 );
+	UG_ButtonCreate( &window_1, &button1_4, BTN_ID_3, 120, 10, UG_WindowGetInnerWidth( &window_1 ) - 10 , 60 );
+	UG_ButtonCreate( &window_1, &button1_5, BTN_ID_4, 120, 80, UG_WindowGetInnerWidth( &window_1 ) - 10, 130 );
+	UG_ButtonCreate( &window_1, &button1_6, BTN_ID_5, 120, 150, UG_WindowGetInnerWidth( &window_1 ) - 10, 200 );
+	/* Configure Button 1 */
+	UG_ButtonSetChineseFont( &window_1, BTN_ID_0, &CN_FONT_32X32);
+	UG_ButtonSetBackColor( &window_1, BTN_ID_0, C_LIME );
+	UG_ButtonSetText( &window_1, BTN_ID_0, "威高" );
+	 /* Configure Button 2 */
+	UG_ButtonSetFont( &window_1, BTN_ID_1, &FONT_12X20 );
+	UG_ButtonSetBackColor( &window_1, BTN_ID_1, C_RED );
+	 UG_ButtonSetForeColor( &window_1, BTN_ID_1,C_YELLOW);
+	UG_ButtonSetText( &window_1, BTN_ID_1, "LED\nOFF" );
+	 /* Configure Button 3 */
+	UG_ButtonSetFont( &window_1, BTN_ID_2, &FONT_12X20 );
+	UG_ButtonSetText( &window_1, BTN_ID_2, "About\nGUI" );
+	UG_WindowShow( &window_1 );
+
+}
+
+
 
 /*
 void UGUI_ShowImage(UG_WINDOW* window, UG_BMP* bmp )
@@ -639,6 +670,7 @@ void UGUI_WindowStateHandler(eKeyType event)
 
 	switch(event){	
 		case Key_Func1: 
+			UGUI_ShowChineseWindow();
 			Key_Fun = MainKeyTab[Key_Fun].KeyEnterState;
 		break;
 		case Key_Func2: 		
@@ -656,6 +688,7 @@ void UGUI_WindowStateHandler(eKeyType event)
 	}
 	KeyFuncPtr = MainKeyTab[Key_Fun].CurrentOperate ;
 	(*KeyFuncPtr)();
+	
 }
 
 /*
@@ -721,7 +754,7 @@ void UGUI_WindowStateHandler(eKeyType event)
 		case Key_BackUp: //背部上折
 		    fastmem_select_mem_window();
 			break;
-/*	
+
 
 		
 		case Key_BackDown,//背部下折

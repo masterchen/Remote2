@@ -91,6 +91,7 @@ typedef struct
    unsigned char* p;
    UG_S16 char_width;
    UG_S16 char_height;
+   UG_U8  isChinese;
 } UG_FONT;
 
 #ifdef USE_FONT_4X6
@@ -142,6 +143,7 @@ typedef struct
    extern const UG_FONT FONT_32X53;
 #endif
 
+extern const UG_FONT CN_FONT_32X32;
 /* -------------------------------------------------------------------------------- */
 /* -- TYPEDEFS                                                                   -- */
 /* -------------------------------------------------------------------------------- */
@@ -812,6 +814,9 @@ UG_RESULT UG_ButtonSetAlternateBackColor( UG_WINDOW* wnd, UG_U8 id, UG_COLOR abc
 UG_RESULT UG_ButtonSetText( UG_WINDOW* wnd, UG_U8 id, char* str );
 UG_RESULT UG_ButtonSetFont( UG_WINDOW* wnd, UG_U8 id, const UG_FONT* font );
 UG_RESULT UG_ButtonSetStyle( UG_WINDOW* wnd, UG_U8 id, UG_U8 style );
+UG_RESULT UG_ButtonSetChineseFont( UG_WINDOW* wnd, UG_U8 id, const UG_FONT* font );
+UG_RESULT UG_ButtonSetChineseStyle( UG_WINDOW* wnd, UG_U8 id, UG_U8 style );
+
 UG_COLOR UG_ButtonGetForeColor( UG_WINDOW* wnd, UG_U8 id );
 UG_COLOR UG_ButtonGetBackColor( UG_WINDOW* wnd, UG_U8 id );
 UG_COLOR UG_ButtonGetAlternateForeColor( UG_WINDOW* wnd, UG_U8 id );

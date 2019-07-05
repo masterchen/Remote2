@@ -4763,6 +4763,10 @@ struct fbcon_font_desc font_vga_104x104 = {
 
 */
 
+
+
+
+
 #ifdef USE_FONT_4X6
    const UG_FONT FONT_4X6 = {(unsigned char*)font_4x6,4,6};
 #endif
@@ -4812,7 +4816,7 @@ struct fbcon_font_desc font_vga_104x104 = {
    const UG_FONT FONT_32X53 = {(unsigned char*)font_32x53,32,53};
 #endif
 
-
+const UG_FONT CN_FONT_32X32 = {(unsigned char*)font_24x40,32,32,1};
 
 UG_S16 UG_Init( UG_GUI* g, void (*p)(UG_S16,UG_S16,UG_COLOR), UG_S16 x, UG_S16 y )
 {
@@ -5586,9 +5590,21 @@ void _UG_PutText(UG_TEXT* txt)
    }
    if ( align & ALIGN_V_CENTER ) yp >>= 1;
    yp += ys;
-   if(0)
+   if(txt->font->isChinese)
    {
-   	Show_Str(xs,ys,txt->fc,txt->bc,str,txt->font->char_height,1);
+		sl=0;
+		c=str;
+		while( (*c != 0) && (*c != '\n') )
+		{
+		 c++;
+		 sl++;
+		}
+		xp = xe - xs + 1;
+		xp -= char_width*sl/2;
+		if ( align & ALIGN_H_LEFT ) xp = 0;
+	    else if ( align & ALIGN_H_CENTER ) xp >>= 1;
+	    xp += xs;
+		Show_Str(xp,ys,txt->fc,txt->bc,(u8*)str,txt->font->char_height,1);
    }
    else
    	{
@@ -6758,8 +6774,7 @@ UG_RESULT _UG_WindowDrawTitle( UG_WINDOW* wnd )
       txt.align = wnd->title.align;
       txt.h_space = wnd->title.h_space;
       txt.v_space = wnd->title.v_space;
-      _UG_PutText( &txt );
-
+	  _UG_PutText( &txt );
       /* Draw line */
       UG_DrawLine(xs,ys+wnd->title.height,xe,ys+wnd->title.height,pal_window[11]);
       return UG_RESULT_OK;
@@ -7013,6 +7028,37 @@ UG_RESULT UG_ButtonSetFont( UG_WINDOW* wnd, UG_U8 id, const UG_FONT* font )
    return UG_RESULT_OK;
 }
 
+UG_RESULT UG_ButtonSetChineseText( UG_WINDOW* wnd, UG_U8 id, char* str )
+{
+   UG_OBJECT* obj=NULL;
+   UG_BUTTON* btn=NULL;
+
+   obj = _UG_SearchObject( wnd, OBJ_TYPE_BUTTON, id );
+   if ( obj == NULL ) return UG_RESULT_FAIL;
+
+   btn = (UG_BUTTON*)(obj->data);
+   btn->str = str;
+   obj->state |= OBJ_STATE_UPDATE | OBJ_STATE_REDRAW;
+
+   return UG_RESULT_OK;
+}
+
+UG_RESULT UG_ButtonSetChineseFont( UG_WINDOW* wnd, UG_U8 id, const UG_FONT* font )
+{
+   UG_OBJECT* obj=NULL;
+   UG_BUTTON* btn=NULL;
+
+   obj = _UG_SearchObject( wnd, OBJ_TYPE_BUTTON, id );
+   if ( obj == NULL ) return UG_RESULT_FAIL;
+
+   btn = (UG_BUTTON*)(obj->data);
+   btn->font = font;
+   obj->state |= OBJ_STATE_UPDATE | OBJ_STATE_REDRAW;
+
+   return UG_RESULT_OK;
+}
+
+
 UG_RESULT UG_ButtonSetStyle( UG_WINDOW* wnd, UG_U8 id, UG_U8 style )
 {
    UG_OBJECT* obj=NULL;
@@ -7246,7 +7292,8 @@ void _UG_ButtonUpdate(UG_WINDOW* wnd, UG_OBJECT* obj)
             txt.h_space = 2;
             txt.v_space = 2;
             txt.str = btn->str;
-            _UG_PutText( &txt );
+			_UG_PutText( &txt );
+
             obj->state &= ~OBJ_STATE_REDRAW;
          }
          /* Draw button frame */
@@ -7598,7 +7645,7 @@ void _UG_TextboxUpdate(UG_WINDOW* wnd, UG_OBJECT* obj)
             txt.h_space = txb->h_space;
             txt.v_space = txb->v_space;
             txt.str = txb->str;
-            _UG_PutText( &txt );
+			_UG_PutText( &txt );
             obj->state &= ~OBJ_STATE_REDRAW;
          }
       }
